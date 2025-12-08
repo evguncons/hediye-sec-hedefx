@@ -146,10 +146,20 @@
     </footer>
 
     <script>
+        // --- SES EFEKTLERİ ---
+        // Sorunsuz çalışan MP3 kaynakları
+        const clickSound = new Audio('https://cdn.pixabay.com/audio/2022/03/15/audio_c8c8a73467.mp3'); 
+        const waitSound = new Audio('https://cdn.pixabay.com/audio/2022/03/10/audio_c635d968b5.mp3'); 
+        const winSound = new Audio('https://cdn.pixabay.com/audio/2021/08/04/audio_0625c153e2.mp3'); 
+        
+        clickSound.volume = 0.5;
+        waitSound.volume = 0.6;
+        winSound.volume = 0.7;
+
         // --- AYARLAR KISMI ---
         
         // TEK ORTAK GIF (Tüm seçimler için bu GIF oynar)
-        const GIF_URL = "https://www.upload.ee/image/18878169/ezgif-3f98e6a685125b54.gif";
+        const GIF_URL = "https://www.upload.ee/image/18878896/ezgif-6d0aafcd45792c21.gif";
 
         // 2. GIF NE KADAR SÜRE OYNASIN? (Milisaniye cinsinden)
         // 3000 = 3 saniye, 4000 = 4 saniye
@@ -157,7 +167,7 @@
 
         const hediyeler = [
             { ad: "Gardırop Tipi Buzdolabı", sans: 1 },
-            { ad: "10kg Kurutmalı Çamaşır Makinesi", sans: 2 },
+            { ad: "10kg Çamaşır Makinesi", sans: 2 },
             { ad: "Ankastre Fırın Seti", sans: 3 },
             { ad: "65 İnç 4K Smart TV", sans: 4 },
             { ad: "Robot Süpürge ve Paspas", sans: 8 },
@@ -186,12 +196,21 @@
             return hediyeler[hediyeler.length - 1].ad;
         }
 
-        // Yeni Animasyonlu Açılış Fonksiyonu
+        // Animasyonlu Açılış Fonksiyonu
         function startAnimation(boxNumber) {
             if (isProcessing) return;
             isProcessing = true;
 
-            // 1. GIF Overlay'i Göster
+            // 1. SES: Tıklama sesi çal
+            clickSound.currentTime = 0;
+            clickSound.play().catch(e => console.warn("Ses hatası:", e));
+
+            // 2. SES: Bekleme/Sihir sesi çal (Döngüye al)
+            waitSound.currentTime = 0;
+            waitSound.loop = true;
+            waitSound.play().catch(e => console.warn("Ses hatası:", e));
+
+            // GIF Overlay'i Göster
             const gifOverlay = document.getElementById('gif-overlay');
             const gifImage = document.getElementById('animation-gif');
             
@@ -201,7 +220,7 @@
             
             gifOverlay.classList.remove('hidden');
 
-            // 2. Belirlenen süre kadar bekle ve sonucu göster
+            // 3. Belirlenen süre kadar bekle ve sonucu göster
             setTimeout(() => {
                 const prize = getRandomPrize();
                 
@@ -212,15 +231,26 @@
                 showResult(prize);
                 startConfetti();
                 
+                // Bekleme sesini durdur
+                waitSound.pause();
+                
             }, GIF_DURATION);
         }
 
         function showResult(prizeName) {
+            // 4. SES: Kazanma sesi çal
+            winSound.currentTime = 0;
+            winSound.play().catch(e => console.warn("Ses hatası:", e));
+
             document.getElementById('won-prize-name').innerText = prizeName;
             document.getElementById('result-modal').classList.remove('hidden');
         }
 
         function resetGame() {
+            // Sesleri durdur (Gerekirse)
+            waitSound.pause();
+            waitSound.currentTime = 0;
+            
             document.getElementById('result-modal').classList.add('hidden');
             stopConfetti();
             isProcessing = false;
