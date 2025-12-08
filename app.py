@@ -6,7 +6,7 @@ import os
 # Sayfa Konfigürasyonu
 # -----------------------------------------------------------------------------
 st.set_page_config(
-    page_title="Satış Liderlik Tablosu",
+    page_title="HEDİYEYİ KAP HEDEFİX",
     page_icon="🏆",
     layout="wide"
 )
