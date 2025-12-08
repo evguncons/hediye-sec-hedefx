@@ -75,7 +75,7 @@
                     1. Seçim
                 </span>
                 <div class="relative w-full h-48 md:h-[500px] flex items-end justify-center">
-                    <img src="https://www.upload.ee/image/18878075/freepik__a-cute-pink-female-mascot-with-big-sparkling-eyes-__9757.jpeg" 
+                    <img src="https://www.upload.ee/image/18878142/freepik__pink-female-mascot-with-large-glittering-eyes-pres__9764.jpeg" 
                          alt="Hediye Maskotu 1" 
                          class="h-full w-auto object-contain filter drop-shadow-2xl hover:brightness-105 transition-all duration-300 rounded-2xl">
                 </div>
@@ -87,7 +87,7 @@
                     2. Seçim
                 </span>
                 <div class="relative w-full h-48 md:h-[500px] flex items-end justify-center">
-                    <img src="https://www.upload.ee/image/18878076/freepik__adorable-pink-female-mascot-sparkling-eyes-standin__9758.jpeg" 
+                    <img src="https://www.upload.ee/image/18878151/freepik__a-cute-pink-female-mascot-with-big-sparkling-eyes-__9768.jpeg" 
                          alt="Hediye Maskotu 2" 
                          class="h-full w-auto object-contain filter drop-shadow-2xl hover:brightness-105 transition-all duration-300 rounded-2xl">
                 </div>
@@ -99,7 +99,7 @@
                     3. Seçim
                 </span>
                 <div class="relative w-full h-48 md:h-[500px] flex items-end justify-center">
-                    <img src="https://www.upload.ee/image/18878077/freepik__a-cute-pink-female-mascot-with-big-sparkling-eyes-__9759.jpeg" 
+                    <img src="https://www.upload.ee/image/18878161/freepik__a-cute-pink-female-mascot-with-big-sparkling-eyes-__9770.jpeg" 
                          alt="Hediye Maskotu 3" 
                          class="h-full w-auto object-contain filter drop-shadow-2xl hover:brightness-105 transition-all duration-300 rounded-2xl">
                 </div>
@@ -142,18 +142,14 @@
 
     <!-- Footer -->
     <footer class="w-full text-center py-4 text-xs font-semibold text-pink-400/70">
-        &copy; 2025 Hedef AVM
+        &copy; 2024 Hedef AVM
     </footer>
 
     <script>
         // --- AYARLAR KISMI ---
         
-        // HER SEÇİM İÇİN AYRI GIF TANIMLAMALARI
-        const GIF_URLS = {
-            1: "https://www.upload.ee/image/18878086/ezgif-4e045318f68b6b15.gif",
-            2: "https://www.upload.ee/image/18878096/ezgif-4280917e3be25dc0.gif",
-            3: "https://www.upload.ee/image/18878100/ezgif-4d02c5517975449c.gif"
-        };
+        // TEK ORTAK GIF (Tüm seçimler için bu GIF oynar)
+        const GIF_URL = "https://www.upload.ee/image/18878169/ezgif-3f98e6a685125b54.gif";
 
         // 2. GIF NE KADAR SÜRE OYNASIN? (Milisaniye cinsinden)
         // 3000 = 3 saniye, 4000 = 4 saniye
@@ -199,12 +195,9 @@
             const gifOverlay = document.getElementById('gif-overlay');
             const gifImage = document.getElementById('animation-gif');
             
-            // Seçilen kutuya göre doğru GIF'i al
-            const selectedGif = GIF_URLS[boxNumber];
-
             // GIF'i her seferinde baştan oynatmak için src'yi yenile
             gifImage.src = ""; 
-            gifImage.src = selectedGif;
+            gifImage.src = GIF_URL;
             
             gifOverlay.classList.remove('hidden');
 
