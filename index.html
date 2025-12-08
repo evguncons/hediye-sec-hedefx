@@ -18,6 +18,7 @@
         .gift-mascot {
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             cursor: pointer;
+            -webkit-tap-highlight-color: transparent; /* Mobilde dokunma efektini düzeltir */
         }
         .gift-mascot:hover {
             transform: scale(1.05) translateY(-10px);
@@ -45,36 +46,38 @@
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col items-center justify-between text-gray-800 relative overflow-hidden">
+<body class="min-h-screen flex flex-col items-center justify-between text-gray-800 relative overflow-x-hidden overflow-y-auto">
 
     <!-- Konfeti Alanı -->
     <canvas id="confetti-canvas"></canvas>
 
     <!-- Header / Logo Alanı -->
-    <header class="w-full text-center pt-6 pb-2 z-10">
+    <header class="w-full text-center pt-4 md:pt-6 pb-2 z-10 px-2">
         <h1 class="text-3xl md:text-5xl font-extrabold text-pink-600 drop-shadow-sm tracking-wide">HEDEF AVM</h1>
-        <p class="text-pink-500 font-bold text-sm md:text-lg mt-1 tracking-widest">SÜRPRİZ HEDİYE OYUNU</p>
+        <p class="text-pink-500 font-bold text-xs md:text-lg mt-1 tracking-widest">SÜRPRİZ HEDİYE OYUNU</p>
     </header>
 
     <!-- Ana Oyun Alanı -->
-    <main class="flex-1 w-full max-w-7xl flex flex-col items-center justify-center px-4 z-10 pb-10">
+    <main class="flex-1 w-full max-w-7xl flex flex-col items-center justify-center px-2 md:px-4 z-10 pb-4 md:pb-10">
         
         <!-- Bilgilendirme Metni -->
-        <div id="instruction-text" class="text-center mb-4 md:mb-8">
-            <span class="inline-block bg-white/80 backdrop-blur-md px-8 py-3 rounded-full shadow-md text-lg md:text-2xl font-bold text-pink-600 border-2 border-pink-100">
+        <div id="instruction-text" class="text-center mb-4 md:mb-8 mt-2">
+            <span class="inline-block bg-white/80 backdrop-blur-md px-6 py-2 md:px-8 md:py-3 rounded-full shadow-md text-sm md:text-2xl font-bold text-pink-600 border-2 border-pink-100">
                 Şanslı maskotunu seç!
             </span>
         </div>
 
         <!-- Maskotlar Container -->
+        <!-- Mobil için gap-2, masaüstü için gap-8. Yükseklik otomatik ayarlanır. -->
         <div id="game-area" class="grid grid-cols-3 gap-2 md:gap-8 w-full items-end justify-items-center h-auto">
             
             <!-- Seçim 1 -->
             <div class="gift-mascot group flex flex-col items-center w-full" onclick="startAnimation(1)">
-                <span class="mb-2 md:mb-6 font-bold text-pink-600 bg-white px-4 py-1 md:px-6 md:py-2 rounded-full shadow-lg border border-pink-100 text-xs md:text-lg group-hover:bg-pink-600 group-hover:text-white transition-colors z-20">
+                <span class="mb-2 md:mb-6 font-bold text-pink-600 bg-white px-2 py-1 md:px-6 md:py-2 rounded-full shadow-lg border border-pink-100 text-[10px] md:text-lg group-hover:bg-pink-600 group-hover:text-white transition-colors z-20 whitespace-nowrap">
                     1. Seçim
                 </span>
-                <div class="relative w-full h-48 md:h-[500px] flex items-end justify-center">
+                <!-- Mobilde h-32 (küçük), Tablette h-48, Masaüstünde h-[500px] -->
+                <div class="relative w-full h-32 sm:h-48 md:h-[500px] flex items-end justify-center">
                     <img src="https://www.upload.ee/image/18878142/freepik__pink-female-mascot-with-large-glittering-eyes-pres__9764.jpeg" 
                          alt="Hediye Maskotu 1" 
                          class="h-full w-auto object-contain filter drop-shadow-2xl hover:brightness-105 transition-all duration-300 rounded-2xl">
@@ -83,10 +86,10 @@
 
             <!-- Seçim 2 -->
             <div class="gift-mascot group flex flex-col items-center w-full" onclick="startAnimation(2)">
-                <span class="mb-2 md:mb-6 font-bold text-pink-600 bg-white px-4 py-1 md:px-6 md:py-2 rounded-full shadow-lg border border-pink-100 text-xs md:text-lg group-hover:bg-pink-600 group-hover:text-white transition-colors z-20">
+                <span class="mb-2 md:mb-6 font-bold text-pink-600 bg-white px-2 py-1 md:px-6 md:py-2 rounded-full shadow-lg border border-pink-100 text-[10px] md:text-lg group-hover:bg-pink-600 group-hover:text-white transition-colors z-20 whitespace-nowrap">
                     2. Seçim
                 </span>
-                <div class="relative w-full h-48 md:h-[500px] flex items-end justify-center">
+                <div class="relative w-full h-32 sm:h-48 md:h-[500px] flex items-end justify-center">
                     <img src="https://www.upload.ee/image/18878151/freepik__a-cute-pink-female-mascot-with-big-sparkling-eyes-__9768.jpeg" 
                          alt="Hediye Maskotu 2" 
                          class="h-full w-auto object-contain filter drop-shadow-2xl hover:brightness-105 transition-all duration-300 rounded-2xl">
@@ -95,10 +98,10 @@
 
             <!-- Seçim 3 -->
             <div class="gift-mascot group flex flex-col items-center w-full" onclick="startAnimation(3)">
-                <span class="mb-2 md:mb-6 font-bold text-pink-600 bg-white px-4 py-1 md:px-6 md:py-2 rounded-full shadow-lg border border-pink-100 text-xs md:text-lg group-hover:bg-pink-600 group-hover:text-white transition-colors z-20">
+                <span class="mb-2 md:mb-6 font-bold text-pink-600 bg-white px-2 py-1 md:px-6 md:py-2 rounded-full shadow-lg border border-pink-100 text-[10px] md:text-lg group-hover:bg-pink-600 group-hover:text-white transition-colors z-20 whitespace-nowrap">
                     3. Seçim
                 </span>
-                <div class="relative w-full h-48 md:h-[500px] flex items-end justify-center">
+                <div class="relative w-full h-32 sm:h-48 md:h-[500px] flex items-end justify-center">
                     <img src="https://www.upload.ee/image/18878161/freepik__a-cute-pink-female-mascot-with-big-sparkling-eyes-__9770.jpeg" 
                          alt="Hediye Maskotu 3" 
                          class="h-full w-auto object-contain filter drop-shadow-2xl hover:brightness-105 transition-all duration-300 rounded-2xl">
@@ -110,30 +113,30 @@
     </main>
 
     <!-- GIF Animasyon Ekranı -->
-    <div id="gif-overlay" class="fixed inset-0 z-40 flex items-center justify-center bg-black/80 hidden flex-col">
+    <div id="gif-overlay" class="fixed inset-0 z-40 flex items-center justify-center bg-black/80 hidden flex-col px-4">
         <!-- Buraya GIF gelecek -->
         <img id="animation-gif" src="" alt="Hediye Hazırlanıyor..." class="w-full max-w-md h-auto object-contain drop-shadow-2xl">
-        <p class="text-white font-bold text-xl mt-4 animate-pulse">Hediye Hazırlanıyor...</p>
+        <p class="text-white font-bold text-xl mt-4 animate-pulse text-center">Hediye Hazırlanıyor...</p>
     </div>
 
     <!-- Sonuç Modalı -->
-    <div id="result-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm hidden">
-        <div class="modal-content bg-white rounded-[2rem] p-8 max-w-md w-[90%] text-center shadow-2xl relative border-8 border-pink-200">
+    <div id="result-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm hidden p-4">
+        <div class="modal-content bg-white rounded-[2rem] p-6 md:p-8 max-w-md w-full text-center shadow-2xl relative border-8 border-pink-200 overflow-y-auto max-h-[90vh]">
             <!-- Süsleme -->
-            <div class="absolute -top-12 left-1/2 transform -translate-x-1/2 w-24 h-24 bg-gradient-to-br from-pink-400 to-pink-600 rounded-full flex items-center justify-center border-4 border-white shadow-xl animate-bounce">
-                <i class="fas fa-gift text-5xl text-white"></i>
+            <div class="absolute -top-10 md:-top-12 left-1/2 transform -translate-x-1/2 w-20 h-20 md:w-24 md:h-24 bg-gradient-to-br from-pink-400 to-pink-600 rounded-full flex items-center justify-center border-4 border-white shadow-xl animate-bounce">
+                <i class="fas fa-gift text-4xl md:text-5xl text-white"></i>
             </div>
 
-            <h2 class="text-3xl font-extrabold text-gray-800 mt-10 mb-2 tracking-tight">TEBRİKLER!</h2>
-            <p class="text-pink-500 font-medium mb-6">Şanslı seçiminden kazandığın ürün:</p>
+            <h2 class="text-2xl md:text-3xl font-extrabold text-gray-800 mt-8 md:mt-10 mb-2 tracking-tight">TEBRİKLER!</h2>
+            <p class="text-pink-500 font-medium mb-4 md:mb-6 text-sm md:text-base">Şanslı seçiminden kazandığın ürün:</p>
             
-            <div class="bg-pink-50 p-6 rounded-2xl border-2 border-pink-100 mb-8 transform rotate-1 hover:rotate-0 transition-transform">
-                <p id="won-prize-name" class="text-2xl md:text-3xl font-black text-pink-600 uppercase break-words leading-tight">...</p>
+            <div class="bg-pink-50 p-4 md:p-6 rounded-2xl border-2 border-pink-100 mb-6 md:mb-8 transform rotate-1 hover:rotate-0 transition-transform">
+                <p id="won-prize-name" class="text-xl md:text-3xl font-black text-pink-600 uppercase break-words leading-tight">...</p>
             </div>
             
             <div class="border-t border-gray-100 pt-4">
-                <p class="text-sm text-gray-400 mb-4 font-medium">Lütfen bu ekranı görevliye gösteriniz.</p>
-                <button onclick="resetGame()" class="w-full bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-bold py-4 rounded-xl transition-all shadow-lg shadow-pink-200 text-lg">
+                <p class="text-xs md:text-sm text-gray-400 mb-4 font-medium">Lütfen bu ekranı görevliye gösteriniz.</p>
+                <button onclick="resetGame()" class="w-full bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-bold py-3 md:py-4 rounded-xl transition-all shadow-lg shadow-pink-200 text-base md:text-lg">
                     Yeni Oyun Başlat
                 </button>
             </div>
@@ -141,7 +144,7 @@
     </div>
 
     <!-- Footer -->
-    <footer class="w-full text-center py-4 text-xs font-semibold text-pink-400/70">
+    <footer class="w-full text-center py-4 text-[10px] md:text-xs font-semibold text-pink-400/70">
         &copy; 2024 Hedef AVM
     </footer>
 
