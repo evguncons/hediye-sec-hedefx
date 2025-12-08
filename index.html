@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hedef AVM - Şanslı Kutu Oyunu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%);
+        }
+        
+        /* Maskot Etkileşimleri */
+        .gift-mascot {
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+        }
+        .gift-mascot:hover {
+            transform: scale(1.05) translateY(-10px);
+            filter: drop-shadow(0 20px 20px rgba(236, 72, 153, 0.3));
+        }
+        
+        /* Modal Animasyonu */
+        .modal-content {
+            animation: popIn 0.4s ease-out;
+        }
+        @keyframes popIn {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* Konfeti Canvas */
+        #confetti-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 50;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-between text-gray-800 relative overflow-hidden">
+
+    <!-- Konfeti Alanı -->
+    <canvas id="confetti-canvas"></canvas>
+
+    <!-- Header / Logo Alanı -->
+    <header class="w-full text-center pt-6 pb-2 z-10">
+        <h1 class="text-3xl md:text-5xl font-extrabold text-pink-600 drop-shadow-sm tracking-wide">HEDEF AVM</h1>
+        <p class="text-pink-500 font-bold text-sm md:text-lg mt-1 tracking-widest">SÜRPRİZ HEDİYE OYUNU</p>
+    </header>
+
+    <!-- Ana Oyun Alanı -->
+    <main class="flex-1 w-full max-w-7xl flex flex-col items-center justify-center px-4 z-10 pb-10">
+        
+        <!-- Bilgilendirme Metni -->
+        <div id="instruction-text" class="text-center mb-4 md:mb-8">
+            <span class="inline-block bg-white/80 backdrop-blur-md px-8 py-3 rounded-full shadow-md text-lg md:text-2xl font-bold text-pink-600 border-2 border-pink-100">
+                Şanslı maskotunu seç!
+            </span>
+        </div>
+
+        <!-- Maskotlar Container -->
+        <div id="game-area" class="grid grid-cols-3 gap-2 md:gap-8 w-full items-end justify-items-center h-auto">
+            
+            <!-- Seçim 1 -->
+            <div class="gift-mascot group flex flex-col items-center w-full" onclick="startAnimation(1)">
+                <span class="mb-2 md:mb-6 font-bold text-pink-600 bg-white px-4 py-1 md:px-6 md:py-2 rounded-full shadow-lg border border-pink-100 text-xs md:text-lg group-hover:bg-pink-600 group-hover:text-white transition-colors z-20">
+                    1. Seçim
+                </span>
+                <div class="relative w-full h-48 md:h-[500px] flex items-end justify-center">
+                    <img src="https://www.upload.ee/image/18878075/freepik__a-cute-pink-female-mascot-with-big-sparkling-eyes-__9757.jpeg" 
+                         alt="Hediye Maskotu 1" 
+                         class="h-full w-auto object-contain filter drop-shadow-2xl hover:brightness-105 transition-all duration-300 rounded-2xl">
+                </div>
+            </div>
+
+            <!-- Seçim 2 -->
+            <div class="gift-mascot group flex flex-col items-center w-full" onclick="startAnimation(2)">
+                <span class="mb-2 md:mb-6 font-bold text-pink-600 bg-white px-4 py-1 md:px-6 md:py-2 rounded-full shadow-lg border border-pink-100 text-xs md:text-lg group-hover:bg-pink-600 group-hover:text-white transition-colors z-20">
+                    2. Seçim
+                </span>
+                <div class="relative w-full h-48 md:h-[500px] flex items-end justify-center">
+                    <img src="https://www.upload.ee/image/18878076/freepik__adorable-pink-female-mascot-sparkling-eyes-standin__9758.jpeg" 
+                         alt="Hediye Maskotu 2" 
+                         class="h-full w-auto object-contain filter drop-shadow-2xl hover:brightness-105 transition-all duration-300 rounded-2xl">
+                </div>
+            </div>
+
+            <!-- Seçim 3 -->
+            <div class="gift-mascot group flex flex-col items-center w-full" onclick="startAnimation(3)">
+                <span class="mb-2 md:mb-6 font-bold text-pink-600 bg-white px-4 py-1 md:px-6 md:py-2 rounded-full shadow-lg border border-pink-100 text-xs md:text-lg group-hover:bg-pink-600 group-hover:text-white transition-colors z-20">
+                    3. Seçim
+                </span>
+                <div class="relative w-full h-48 md:h-[500px] flex items-end justify-center">
+                    <img src="https://www.upload.ee/image/18878077/freepik__a-cute-pink-female-mascot-with-big-sparkling-eyes-__9759.jpeg" 
+                         alt="Hediye Maskotu 3" 
+                         class="h-full w-auto object-contain filter drop-shadow-2xl hover:brightness-105 transition-all duration-300 rounded-2xl">
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- GIF Animasyon Ekranı -->
+    <div id="gif-overlay" class="fixed inset-0 z-40 flex items-center justify-center bg-black/80 hidden flex-col">
+        <!-- Buraya GIF gelecek -->
+        <img id="animation-gif" src="" alt="Hediye Hazırlanıyor..." class="w-full max-w-md h-auto object-contain drop-shadow-2xl">
+        <p class="text-white font-bold text-xl mt-4 animate-pulse">Hediye Hazırlanıyor...</p>
+    </div>
+
+    <!-- Sonuç Modalı -->
+    <div id="result-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm hidden">
+        <div class="modal-content bg-white rounded-[2rem] p-8 max-w-md w-[90%] text-center shadow-2xl relative border-8 border-pink-200">
+            <!-- Süsleme -->
+            <div class="absolute -top-12 left-1/2 transform -translate-x-1/2 w-24 h-24 bg-gradient-to-br from-pink-400 to-pink-600 rounded-full flex items-center justify-center border-4 border-white shadow-xl animate-bounce">
+                <i class="fas fa-gift text-5xl text-white"></i>
+            </div>
+
+            <h2 class="text-3xl font-extrabold text-gray-800 mt-10 mb-2 tracking-tight">TEBRİKLER!</h2>
+            <p class="text-pink-500 font-medium mb-6">Şanslı seçiminden kazandığın ürün:</p>
+            
+            <div class="bg-pink-50 p-6 rounded-2xl border-2 border-pink-100 mb-8 transform rotate-1 hover:rotate-0 transition-transform">
+                <p id="won-prize-name" class="text-2xl md:text-3xl font-black text-pink-600 uppercase break-words leading-tight">...</p>
+            </div>
+            
+            <div class="border-t border-gray-100 pt-4">
+                <p class="text-sm text-gray-400 mb-4 font-medium">Lütfen bu ekranı görevliye gösteriniz.</p>
+                <button onclick="resetGame()" class="w-full bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-bold py-4 rounded-xl transition-all shadow-lg shadow-pink-200 text-lg">
+                    Yeni Oyun Başlat
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="w-full text-center py-4 text-xs font-semibold text-pink-400/70">
+        &copy; 2024 Hedef AVM
+    </footer>
+
+    <script>
+        // --- AYARLAR KISMI ---
+        
+        // HER SEÇİM İÇİN AYRI GIF TANIMLAMALARI
+        const GIF_URLS = {
+            1: "https://www.upload.ee/image/18878086/ezgif-4e045318f68b6b15.gif",
+            2: "https://www.upload.ee/image/18878096/ezgif-4280917e3be25dc0.gif",
+            3: "https://www.upload.ee/image/18878100/ezgif-4d02c5517975449c.gif"
+        };
+
+        // 2. GIF NE KADAR SÜRE OYNASIN? (Milisaniye cinsinden)
+        // 3000 = 3 saniye, 4000 = 4 saniye
+        const GIF_DURATION = 3500;
+
+        const hediyeler = [
+            { ad: "Gardırop Tipi Buzdolabı", sans: 1 },
+            { ad: "10kg Kurutmalı Çamaşır Makinesi", sans: 2 },
+            { ad: "Ankastre Fırın Seti", sans: 3 },
+            { ad: "65 İnç 4K Smart TV", sans: 4 },
+            { ad: "Robot Süpürge ve Paspas", sans: 8 },
+            { ad: "Dikey Süpürge", sans: 12 },
+            { ad: "Espresso Makinesi", sans: 15 },
+            { ad: "Airfryer XXL", sans: 20 },
+            { ad: "Çay Makinesi", sans: 30 },
+            { ad: "Tost Makinesi", sans: 40 },
+            { ad: "El Blender Seti", sans: 50 }
+        ];
+
+        let isProcessing = false;
+
+        function getRandomPrize() {
+            let totalWeight = 0;
+            hediyeler.forEach(prize => totalWeight += prize.sans);
+
+            let random = Math.floor(Math.random() * totalWeight);
+            
+            for (let i = 0; i < hediyeler.length; i++) {
+                random -= hediyeler[i].sans;
+                if (random < 0) {
+                    return hediyeler[i].ad;
+                }
+            }
+            return hediyeler[hediyeler.length - 1].ad;
+        }
+
+        // Yeni Animasyonlu Açılış Fonksiyonu
+        function startAnimation(boxNumber) {
+            if (isProcessing) return;
+            isProcessing = true;
+
+            // 1. GIF Overlay'i Göster
+            const gifOverlay = document.getElementById('gif-overlay');
+            const gifImage = document.getElementById('animation-gif');
+            
+            // Seçilen kutuya göre doğru GIF'i al
+            const selectedGif = GIF_URLS[boxNumber];
+
+            // GIF'i her seferinde baştan oynatmak için src'yi yenile
+            gifImage.src = ""; 
+            gifImage.src = selectedGif;
+            
+            gifOverlay.classList.remove('hidden');
+
+            // 2. Belirlenen süre kadar bekle ve sonucu göster
+            setTimeout(() => {
+                const prize = getRandomPrize();
+                
+                // GIF'i gizle
+                gifOverlay.classList.add('hidden');
+                
+                // Sonucu göster
+                showResult(prize);
+                startConfetti();
+                
+            }, GIF_DURATION);
+        }
+
+        function showResult(prizeName) {
+            document.getElementById('won-prize-name').innerText = prizeName;
+            document.getElementById('result-modal').classList.remove('hidden');
+        }
+
+        function resetGame() {
+            document.getElementById('result-modal').classList.add('hidden');
+            stopConfetti();
+            isProcessing = false;
+        }
+
+        // --- KONFETİ EFEKTİ ---
+        const canvas = document.getElementById('confetti-canvas');
+        const ctx = canvas.getContext('2d');
+        let confettiAnimation;
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        function createParticle() {
+            const colors = ['#ec4899', '#f472b6', '#fbcfe8', '#fbbf24', '#60a5fa'];
+            return {
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height - canvas.height,
+                color: colors[Math.floor(Math.random() * colors.length)],
+                size: Math.random() * 8 + 4,
+                speedY: Math.random() * 3 + 2,
+                speedX: Math.random() * 2 - 1,
+                angle: Math.random() * 360
+            };
+        }
+
+        function drawConfetti() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach((p, index) => {
+                p.y += p.speedY;
+                p.x += Math.sin(p.angle) * 2;
+                p.angle += 0.1;
+                
+                ctx.fillStyle = p.color;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fill();
+
+                if (p.y > canvas.height) {
+                    particles[index] = createParticle();
+                    particles[index].y = -10;
+                }
+            });
+            confettiAnimation = requestAnimationFrame(drawConfetti);
+        }
+
+        function startConfetti() {
+            particles = Array(150).fill().map(createParticle);
+            drawConfetti();
+        }
+
+        function stopConfetti() {
+            cancelAnimationFrame(confettiAnimation);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+    </script>
+</body>
+</html>
