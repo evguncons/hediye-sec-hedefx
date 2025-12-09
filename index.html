@@ -48,21 +48,99 @@
             pointer-events: none;
             z-index: 50;
         }
+
+        /* Seçim Kartı Stilleri */
+        .tier-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .tier-card:hover {
+            transform: translateY(-5px);
+        }
+        .tier-card.selected {
+            border-color: #db2777; /* pink-600 */
+            background-color: #fdf2f8; /* pink-50 */
+            box-shadow: 0 10px 25px -5px rgba(219, 39, 119, 0.5);
+            transform: scale(1.05);
+        }
+        .tier-card.selected .check-icon {
+            opacity: 1;
+        }
     </style>
 </head>
-<body class="min-h-screen flex flex-col items-center justify-between text-gray-800 relative overflow-hidden">
+<body class="min-h-screen flex flex-col items-center justify-center text-gray-800 relative overflow-hidden">
 
     <!-- Konfeti Alanı -->
     <canvas id="confetti-canvas"></canvas>
 
     <!-- Header / Logo Alanı -->
-    <header class="w-full text-center pt-6 pb-2 z-10">
+    <header class="w-full text-center pt-6 pb-2 z-10 absolute top-0 left-0">
         <h1 class="text-3xl md:text-5xl font-extrabold text-pink-600 drop-shadow-sm tracking-wide">HEDEF AVM</h1>
         <p class="text-pink-500 font-bold text-sm md:text-lg mt-1 tracking-widest">SÜRPRİZ HEDİYE OYUNU</p>
     </header>
 
-    <!-- Ana Oyun Alanı -->
-    <main class="flex-1 w-full max-w-7xl flex flex-col items-center justify-center px-4 z-10 pb-10">
+    <!-- GİRİŞ / SEÇİM EKRANI -->
+    <div id="entry-screen" class="w-full max-w-6xl px-4 z-20 flex flex-col items-center justify-center h-screen pt-20">
+        
+        <div class="text-center mb-8">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-800 bg-white/80 backdrop-blur-sm px-8 py-2 rounded-full inline-block shadow-sm">
+                Alışveriş Tutarınızı Seçiniz
+            </h2>
+            <p class="text-gray-600 mt-2 font-medium bg-white/60 px-4 py-1 rounded-full inline-block">
+                Hediye havuzu seçiminize göre belirlenecektir.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full mb-10">
+            <!-- 15.000 TL Seçeneği -->
+            <div onclick="selectTier('tier3')" id="card-tier3" class="tier-card bg-white/90 backdrop-blur-md rounded-3xl p-6 border-4 border-transparent shadow-xl flex flex-col items-center justify-center text-center relative h-64 md:h-80 group">
+                <div class="check-icon opacity-0 absolute top-4 right-4 bg-pink-500 text-white rounded-full w-8 h-8 flex items-center justify-center transition-opacity">
+                    <i class="fas fa-check"></i>
+                </div>
+                <div class="w-20 h-20 bg-pink-100 rounded-full flex items-center justify-center mb-4 text-pink-500 text-3xl group-hover:scale-110 transition-transform">
+                    <i class="fas fa-bag-shopping"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-800 mb-2">15.000 TL</h3>
+                <p class="text-sm text-gray-500 font-semibold uppercase tracking-wider">ve Üzeri</p>
+                <div class="mt-4 text-xs text-pink-400 font-medium">Küçük Ev Aletleri & Tekstil</div>
+            </div>
+
+            <!-- 60.000 TL Seçeneği -->
+            <div onclick="selectTier('tier2')" id="card-tier2" class="tier-card bg-white/90 backdrop-blur-md rounded-3xl p-6 border-4 border-transparent shadow-xl flex flex-col items-center justify-center text-center relative h-64 md:h-80 group">
+                <div class="check-icon opacity-0 absolute top-4 right-4 bg-pink-500 text-white rounded-full w-8 h-8 flex items-center justify-center transition-opacity">
+                    <i class="fas fa-check"></i>
+                </div>
+                <div class="w-20 h-20 bg-purple-100 rounded-full flex items-center justify-center mb-4 text-purple-500 text-3xl group-hover:scale-110 transition-transform">
+                    <i class="fas fa-cart-shopping"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-800 mb-2">60.000 TL</h3>
+                <p class="text-sm text-gray-500 font-semibold uppercase tracking-wider">ve Üzeri</p>
+                <div class="mt-4 text-xs text-purple-400 font-medium">Orta Segment & Halı</div>
+            </div>
+
+            <!-- 100.000 TL Seçeneği -->
+            <div onclick="selectTier('tier1')" id="card-tier1" class="tier-card bg-white/90 backdrop-blur-md rounded-3xl p-6 border-4 border-transparent shadow-xl flex flex-col items-center justify-center text-center relative h-64 md:h-80 group">
+                <div class="check-icon opacity-0 absolute top-4 right-4 bg-pink-500 text-white rounded-full w-8 h-8 flex items-center justify-center transition-opacity">
+                    <i class="fas fa-check"></i>
+                </div>
+                <div class="w-20 h-20 bg-yellow-100 rounded-full flex items-center justify-center mb-4 text-yellow-600 text-3xl group-hover:scale-110 transition-transform">
+                    <i class="fas fa-crown"></i>
+                </div>
+                <h3 class="text-3xl font-extrabold text-gray-800 mb-2">100.000 TL</h3>
+                <p class="text-sm text-gray-500 font-semibold uppercase tracking-wider">ve Üzeri</p>
+                <div class="mt-4 text-xs text-yellow-600 font-medium">Büyük Elektronik & Süpürge</div>
+            </div>
+        </div>
+
+        <button onclick="startGame()" id="start-btn" class="bg-gray-300 text-white font-bold py-4 px-12 rounded-full text-xl shadow-lg transition-all transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+            OYUNA BAŞLA
+        </button>
+
+    </div>
+
+
+    <!-- ANA OYUN ALANI (Başlangıçta Gizli) -->
+    <main id="game-container" class="hidden flex-1 w-full max-w-7xl flex flex-col items-center justify-center px-4 z-10 pb-10 pt-20">
         
         <!-- Bilgilendirme Metni -->
         <div id="instruction-text" class="text-center mb-4 md:mb-8">
@@ -133,7 +211,7 @@
             <p class="text-pink-500 font-medium mb-6">Şanslı seçiminden kazandığın ürün:</p>
             
             <div class="bg-pink-50 p-6 rounded-2xl border-2 border-pink-100 mb-8 transform rotate-1 hover:rotate-0 transition-transform">
-                <p id="won-prize-name" class="text-2xl md:text-3xl font-black text-pink-600 uppercase break-words leading-tight">...</p>
+                <p id="won-prize-name" class="text-xl md:text-2xl font-black text-pink-600 uppercase break-words leading-tight">...</p>
             </div>
             
             <div class="border-t border-gray-100 pt-4">
@@ -146,13 +224,12 @@
     </div>
 
     <!-- Footer -->
-    <footer class="w-full text-center py-4 text-xs font-semibold text-pink-400/70">
+    <footer class="w-full text-center py-4 text-xs font-semibold text-pink-400/70 absolute bottom-0 left-0">
         &copy; 2024 Hedef AVM
     </footer>
 
     <script>
         // --- SES EFEKTLERİ ---
-        // Sorunsuz çalışan MP3 kaynakları
         const clickSound = new Audio('https://cdn.pixabay.com/audio/2022/03/15/audio_c8c8a73467.mp3'); 
         const waitSound = new Audio('https://cdn.pixabay.com/audio/2022/03/10/audio_c635d968b5.mp3'); 
         const winSound = new Audio('https://cdn.pixabay.com/audio/2021/08/04/audio_0625c153e2.mp3'); 
@@ -162,88 +239,160 @@
         winSound.volume = 0.7;
 
         // --- AYARLAR KISMI ---
-        
-        // TEK ORTAK GIF (Tüm seçimler için bu GIF oynar)
         const GIF_URL = "https://www.upload.ee/image/18878896/ezgif-6d0aafcd45792c21.gif";
-
-        // 2. GIF NE KADAR SÜRE OYNASIN? (Milisaniye cinsinden)
-        // 3000 = 3 saniye, 4000 = 4 saniye
         const GIF_DURATION = 3500;
 
-        const hediyeler = [
-            { ad: "Gardırop Tipi Buzdolabı", sans: 1 },
-            { ad: "10kg Çamaşır Makinesi", sans: 2 },
-            { ad: "Ankastre Fırın Seti", sans: 3 },
-            { ad: "65 İnç 4K Smart TV", sans: 4 },
-            { ad: "Robot Süpürge ve Paspas", sans: 8 },
-            { ad: "Dikey Süpürge", sans: 12 },
-            { ad: "Espresso Makinesi", sans: 15 },
-            { ad: "Airfryer XXL", sans: 20 },
-            { ad: "Çay Makinesi", sans: 30 },
-            { ad: "Tost Makinesi", sans: 40 },
-            { ad: "El Blender Seti", sans: 50 }
-        ];
+        // --- HEDİYE HAVUZLARI (EXCEL VERİLERİNE GÖRE GÜNCELLENMİŞ) ---
+        const prizePools = {
+            // 100.000 TL ve Üzeri
+            tier1: [
+                { ad: "FAKİR PURE STEAM BUHARLI TEMİZLEYİCİ", sans: 14 },
+                { ad: "ARNİCA ET11200 SÜPÜRGEÇ E-MAX ROSE ŞARJLI DİK SÜPÜRGE", sans: 14 },
+                { ad: "KORKMAZ A981 JAVA SÜT KÖPÜRTÜCÜLÜ ESPRESSO KAHVE MAK.", sans: 10 },
+                { ad: "PHILIPS BXA0014/00 (AIRFRYER & KAHVE MAK. HEDİYE)", sans: 8 },
+                { ad: "SCHAFER THERMOCHEF AIRFRYER/SICAK HAVA FRİTÖZÜ-ANTRASİT", sans: 8 },
+                { ad: "PROFİLO PSP5UHD TOZ TORBASIZ SÜPÜRGE", sans: 13 },
+                { ad: "PROFİLO PSP5U200 TOZ TORBASIZ SÜPÜRGE", sans: 13 },
+                { ad: "TECHNO PC ULTRAPAD UP10.SI36LA 10.1\" 64GB TABLET", sans: 10 },
+                { ad: "ONVO 32\" UYDULU LED TV", sans: 10 }
+            ],
+            // 60.000 TL - 99.999 TL
+            tier2: [
+                { ad: "SCHAFER OPTİMAL ELEKTRİKLİ ÇAY MAKİNESİ -INOX", sans: 4 },
+                { ad: "SCHAFER PLACER ELEKTRİKLİ CEZVE-SİYAH", sans: 4 },
+                { ad: "RUSSELL HOBBS FRY AIR&LARGE 5 LT", sans: 10 },
+                { ad: "FAKİR KAAVE PLUS TÜRK KAHVE MAK.-COPPER", sans: 4 },
+                { ad: "SCHAFER KEYF-İ KAHVE ÇİFT TUŞLU TÜRK KAHVE MAK.", sans: 4 },
+                { ad: "FAKİR MERCY BUHARLI ÜTÜ MAVİ", sans: 4 },
+                { ad: "SCHAFER GLATT ECO BUHARLI ÜTÜ-MOR", sans: 4 },
+                { ad: "KORKMAZ A319-03 MİA WAFFLE MAK.ROSAGOLD", sans: 4 },
+                { ad: "HİKİNG WH9 SMARTWATCH AKILLI SAAT", sans: 4 },
+                { ad: "HALL DREAM 150*230 HALI", sans: 4 },
+                { ad: "LATEKS KAMPANYALI 160*230 HALI", sans: 6 },
+                { ad: "KOZA ZENİTH 160*230 HALI", sans: 7 },
+                { ad: "KOZA MOONLIGHT 160*230 HALI-SK", sans: 7 },
+                { ad: "KOZA HELSİNKİ 160*230 HALI", sans: 7 },
+                { ad: "KOZA LYON 160*230 HALI", sans: 6 },
+                { ad: "KOZA NORWAY 160*230 HALI", sans: 6 },
+                { ad: "TAÇ 4686 EMBOS Ç.K BATTANİYE", sans: 2 },
+                { ad: "İRİNA EKOSE PAMUKLU Ç.K BATTANİYE", sans: 2 },
+                { ad: "COTTONBOX EMBOS Ç.K BATTANİYE", sans: 2 },
+                { ad: "AKSU VİZON Ç.K BATTANİYE", sans: 2 },
+                { ad: "HALİME SULTAN FİTİLLİ Ç.K YORGAN SETİ 195*215", sans: 2 },
+                { ad: "HALİME SULTAN SHERPA Ç.K YORGAN SETİ 195*215", sans: 2 },
+                { ad: "HOMELAND NAKIŞLI Ç.K YATAK ÖRTÜSÜ", sans: 2 }
+            ],
+            // 15.000 TL - 59.999 TL
+            tier3: [
+                { ad: "PLATOON PL-2036 (P47M) KEDİLİ BLUETOOTH KULAKLIK", sans: 3 },
+                { ad: "PLATOON PL-2343 SD BLUETOOTH KULAKLIK", sans: 3 },
+                { ad: "DEXİM GC 31 10000mAh POWERBANK", sans: 3 },
+                { ad: "RAİN KAMPANYALI 80*150 HALI", sans: 15 },
+                { ad: "LATEKS KAMPANYALI 80*150 HALI", sans: 8 },
+                { ad: "CEWİ PUNCH KIRLENT", sans: 8 },
+                { ad: "İRİNA OLİVİA 4'LÜ HAVLU 50*90", sans: 3 },
+                { ad: "HALİME SULTAN PETEK Ç.K YORGAN 195*215", sans: 3 },
+                { ad: "HALİME SULTAN PETEK ULTRA Ç.K YORGAN 195*215", sans: 3 },
+                { ad: "UVİ LASTİKLİ ÇARŞAF YASTIKLI (100X200)", sans: 3 },
+                { ad: "UVİ LASTİKLİ ÇARŞAF YASTIKLI (120X200)", sans: 3 },
+                { ad: "UVİ LASTİKLİ ÇARŞAF YASTIKLI (160X200)", sans: 3 },
+                { ad: "ÇAĞLI Ç.K NEVRESİM TAKIMI", sans: 10 },
+                { ad: "DOĞAN Ç.K NEVRESİM TAKIMI", sans: 10 },
+                { ad: "İRİNA T.K NEVRESİM TKM", sans: 2 },
+                { ad: "HALİME SULTAN KLİMALI TEK BİYELİ KAMPANYALI 50*70 YASTIK", sans: 10 },
+                { ad: "HALİME SULTAN KAMPANYALI 200*225 ÇOK AMAÇLI YATAK ÖRTÜSÜ", sans: 10 }
+            ]
+        };
 
+        let currentPool = []; // Seçilen havuz buraya yüklenecek
         let isProcessing = false;
+        let selectedTier = null;
+
+        // --- GİRİŞ EKRANI FONKSİYONLARI ---
+
+        function selectTier(tier) {
+            // Önceki seçimleri temizle
+            document.querySelectorAll('.tier-card').forEach(card => card.classList.remove('selected'));
+            
+            // Yeni seçimi işaretle
+            const selectedCard = document.getElementById('card-' + tier);
+            selectedCard.classList.add('selected');
+            
+            // Değişkeni güncelle ve butonu aktif et
+            selectedTier = tier;
+            const startBtn = document.getElementById('start-btn');
+            startBtn.disabled = false;
+            startBtn.classList.remove('bg-gray-300', 'cursor-not-allowed');
+            startBtn.classList.add('bg-pink-600', 'hover:bg-pink-700', 'text-white');
+            
+            // Ses efekti
+            clickSound.currentTime = 0;
+            clickSound.play().catch(e => console.warn(e));
+        }
+
+        function startGame() {
+            if (!selectedTier) return;
+
+            // Havuzu ayarla
+            currentPool = prizePools[selectedTier];
+
+            // Ekranları değiştir
+            document.getElementById('entry-screen').classList.add('hidden');
+            document.getElementById('game-container').classList.remove('hidden');
+            document.getElementById('game-container').classList.add('flex'); // Flex özelliğini geri ver
+
+            // Ses efekti
+            clickSound.currentTime = 0;
+            clickSound.play().catch(e => console.warn(e));
+        }
+
+
+        // --- OYUN MANTIĞI ---
 
         function getRandomPrize() {
             let totalWeight = 0;
-            hediyeler.forEach(prize => totalWeight += prize.sans);
+            currentPool.forEach(prize => totalWeight += prize.sans);
 
             let random = Math.floor(Math.random() * totalWeight);
             
-            for (let i = 0; i < hediyeler.length; i++) {
-                random -= hediyeler[i].sans;
+            for (let i = 0; i < currentPool.length; i++) {
+                random -= currentPool[i].sans;
                 if (random < 0) {
-                    return hediyeler[i].ad;
+                    return currentPool[i].ad;
                 }
             }
-            return hediyeler[hediyeler.length - 1].ad;
+            return currentPool[currentPool.length - 1].ad;
         }
 
-        // Animasyonlu Açılış Fonksiyonu
         function startAnimation(boxNumber) {
             if (isProcessing) return;
             isProcessing = true;
 
-            // 1. SES: Tıklama sesi çal
             clickSound.currentTime = 0;
             clickSound.play().catch(e => console.warn("Ses hatası:", e));
 
-            // 2. SES: Bekleme/Sihir sesi çal (Döngüye al)
             waitSound.currentTime = 0;
             waitSound.loop = true;
             waitSound.play().catch(e => console.warn("Ses hatası:", e));
 
-            // GIF Overlay'i Göster
             const gifOverlay = document.getElementById('gif-overlay');
             const gifImage = document.getElementById('animation-gif');
             
-            // GIF'i her seferinde baştan oynatmak için src'yi yenile
             gifImage.src = ""; 
             gifImage.src = GIF_URL;
             
             gifOverlay.classList.remove('hidden');
 
-            // 3. Belirlenen süre kadar bekle ve sonucu göster
             setTimeout(() => {
                 const prize = getRandomPrize();
-                
-                // GIF'i gizle
                 gifOverlay.classList.add('hidden');
-                
-                // Sonucu göster
                 showResult(prize);
                 startConfetti();
-                
-                // Bekleme sesini durdur
                 waitSound.pause();
-                
             }, GIF_DURATION);
         }
 
         function showResult(prizeName) {
-            // 4. SES: Kazanma sesi çal
             winSound.currentTime = 0;
             winSound.play().catch(e => console.warn("Ses hatası:", e));
 
@@ -252,12 +401,26 @@
         }
 
         function resetGame() {
-            // Sesleri durdur (Gerekirse)
             waitSound.pause();
             waitSound.currentTime = 0;
             
+            // Modalı kapat ve konfetiyi durdur
             document.getElementById('result-modal').classList.add('hidden');
             stopConfetti();
+            
+            // Giriş ekranına dön
+            document.getElementById('game-container').classList.add('hidden');
+            document.getElementById('game-container').classList.remove('flex');
+            document.getElementById('entry-screen').classList.remove('hidden');
+            
+            // Seçimleri sıfırla
+            selectedTier = null;
+            document.querySelectorAll('.tier-card').forEach(card => card.classList.remove('selected'));
+            const startBtn = document.getElementById('start-btn');
+            startBtn.disabled = true;
+            startBtn.classList.add('bg-gray-300', 'cursor-not-allowed');
+            startBtn.classList.remove('bg-pink-600', 'hover:bg-pink-700', 'text-white');
+
             isProcessing = false;
         }
 
