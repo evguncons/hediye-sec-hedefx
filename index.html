@@ -498,9 +498,11 @@
             document.getElementById('game-container').classList.add('hidden');
             document.getElementById('game-container').classList.remove('flex');
             
-            document.getElementById('branch-screen').classList.remove('hidden');
+            // Şube seçim ekranına değil, barem (tutar) seçim ekranına geri dön
+            document.getElementById('entry-screen').classList.remove('hidden');
+            document.getElementById('entry-screen').classList.add('flex');
             
-            selectedBranchId = null;
+            // selectedBranchId sıfırlanmaz, böylece seçilen şube aynı kalır
             selectedTierId = null;
             document.querySelectorAll('.tier-card').forEach(card => card.classList.remove('selected'));
             const startBtn = document.getElementById('start-btn');
