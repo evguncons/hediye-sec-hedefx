@@ -66,11 +66,11 @@
             z-index: 50;
         }
 
-        .tier-card, .branch-card {
+        .tier-card {
             transition: all 0.3s ease;
             cursor: pointer;
         }
-        .tier-card:hover, .branch-card:hover {
+        .tier-card:hover {
             transform: translateY(-5px);
         }
         .tier-card.selected {
@@ -83,7 +83,6 @@
             opacity: 1;
         }
         
-        /* Disable text selection on interactive elements */
         .no-select {
             user-select: none;
             -webkit-user-select: none;
@@ -99,46 +98,15 @@
         <p class="text-pink-500 font-bold text-sm md:text-lg mt-1 tracking-widest">SÜRPRİZ HEDİYE OYUNU</p>
     </header>
 
-    <!-- 1. ADIM: ŞUBE SEÇİM EKRANI -->
-    <div id="branch-screen" class="w-full max-w-4xl px-4 z-20 flex flex-col items-center justify-center h-screen pt-20 no-select">
-        <div class="text-center mb-8">
-            <h2 class="text-3xl md:text-4xl font-bold text-gray-800 bg-white/80 backdrop-blur-sm px-8 py-2 rounded-full inline-block shadow-sm">
-                Lütfen Şube Seçiniz
-            </h2>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full mb-10">
-            <!-- İnegöl Şubesi -->
-            <div onclick="selectBranch('İNEGÖL', 'inegol')" class="branch-card bg-white/90 backdrop-blur-md rounded-3xl p-8 border-4 border-transparent shadow-xl flex flex-col items-center justify-center text-center group h-64">
-                <div class="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center mb-4 text-blue-500 text-4xl group-hover:scale-110 transition-transform shadow-inner">
-                    <i class="fas fa-store"></i>
-                </div>
-                <h3 class="text-3xl font-bold text-gray-800">İNEGÖL</h3>
-            </div>
-
-            <!-- Çayırova Şubesi -->
-            <div onclick="selectBranch('ÇAYIROVA', 'cayirova')" class="branch-card bg-white/90 backdrop-blur-md rounded-3xl p-8 border-4 border-transparent shadow-xl flex flex-col items-center justify-center text-center group h-64">
-                <div class="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mb-4 text-green-500 text-4xl group-hover:scale-110 transition-transform shadow-inner">
-                    <i class="fas fa-store-alt"></i>
-                </div>
-                <h3 class="text-3xl font-bold text-gray-800">ÇAYIROVA</h3>
-            </div>
-        </div>
-    </div>
-
-    <!-- 2. ADIM: GİRİŞ / SEÇİM EKRANI (Başlangıçta Gizli) -->
-    <div id="entry-screen" class="hidden w-full max-w-6xl px-4 z-20 flex-col items-center justify-center h-screen pt-20 no-select">
+    <!-- GİRİŞ / BAREM SEÇİM EKRANI -->
+    <div id="entry-screen" class="flex w-full max-w-6xl px-4 z-20 flex-col items-center justify-center h-screen pt-20 no-select">
         
         <div class="text-center mb-8 relative w-full flex flex-col items-center">
-            <!-- Geri Dön Butonu -->
-            <button onclick="backToBranch()" class="absolute left-0 top-0 md:top-1/2 md:-translate-y-1/2 bg-white/90 text-pink-600 px-4 py-2 rounded-full shadow-md hover:bg-pink-50 transition-colors font-bold z-30">
-                <i class="fas fa-arrow-left mr-2"></i> Şube Değiştir
-            </button>
-            <h2 class="text-3xl md:text-4xl font-bold text-gray-800 bg-white/80 backdrop-blur-sm px-8 py-2 rounded-full inline-block shadow-sm mt-12 md:mt-0">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-800 bg-white/80 backdrop-blur-sm px-8 py-2 rounded-full inline-block shadow-sm">
                 Alışveriş Tutarınızı Seçiniz
             </h2>
             <p class="text-gray-600 mt-2 font-medium bg-white/80 backdrop-blur-sm px-4 py-1 rounded-full inline-block shadow-sm">
-                Seçilen Şube: <span id="selected-branch-text" class="text-pink-600 font-bold uppercase"></span>
+                Hediye havuzu seçiminize göre belirlenecektir.
             </p>
         </div>
 
@@ -155,27 +123,27 @@
                 <p class="text-sm text-gray-500 font-semibold uppercase tracking-wider">ve Üzeri</p>
             </div>
 
-            <!-- 50.000 TL Seçeneği -->
-            <div onclick="selectTier('tier50k')" id="card-tier50k" class="tier-card bg-white/90 backdrop-blur-md rounded-3xl p-6 border-4 border-transparent shadow-xl flex flex-col items-center justify-center text-center relative h-64 md:h-80 group">
+            <!-- 60.000 TL Seçeneği -->
+            <div onclick="selectTier('tier60k')" id="card-tier60k" class="tier-card bg-white/90 backdrop-blur-md rounded-3xl p-6 border-4 border-transparent shadow-xl flex flex-col items-center justify-center text-center relative h-64 md:h-80 group">
                 <div class="check-icon opacity-0 absolute top-4 right-4 bg-pink-500 text-white rounded-full w-8 h-8 flex items-center justify-center transition-opacity shadow-md">
                     <i class="fas fa-check"></i>
                 </div>
                 <div class="w-20 h-20 bg-purple-100 rounded-full flex items-center justify-center mb-4 text-purple-500 text-3xl group-hover:scale-110 transition-transform shadow-inner">
                     <i class="fas fa-cart-shopping"></i>
                 </div>
-                <h3 class="text-2xl font-bold text-gray-800 mb-2">50.000 TL</h3>
+                <h3 class="text-2xl font-bold text-gray-800 mb-2">60.000 TL</h3>
                 <p class="text-sm text-gray-500 font-semibold uppercase tracking-wider">ve Üzeri</p>
             </div>
 
-            <!-- 75.000 TL Seçeneği -->
-            <div onclick="selectTier('tier75k')" id="card-tier75k" class="tier-card bg-white/90 backdrop-blur-md rounded-3xl p-6 border-4 border-transparent shadow-xl flex flex-col items-center justify-center text-center relative h-64 md:h-80 group">
+            <!-- 100.000 TL Seçeneği -->
+            <div onclick="selectTier('tier100k')" id="card-tier100k" class="tier-card bg-white/90 backdrop-blur-md rounded-3xl p-6 border-4 border-transparent shadow-xl flex flex-col items-center justify-center text-center relative h-64 md:h-80 group">
                 <div class="check-icon opacity-0 absolute top-4 right-4 bg-pink-500 text-white rounded-full w-8 h-8 flex items-center justify-center transition-opacity shadow-md">
                     <i class="fas fa-check"></i>
                 </div>
                 <div class="w-20 h-20 bg-yellow-100 rounded-full flex items-center justify-center mb-4 text-yellow-600 text-3xl group-hover:scale-110 transition-transform shadow-inner">
                     <i class="fas fa-crown"></i>
                 </div>
-                <h3 class="text-3xl font-extrabold text-gray-800 mb-2">75.000 TL</h3>
+                <h3 class="text-3xl font-extrabold text-gray-800 mb-2">100.000 TL</h3>
                 <p class="text-sm text-gray-500 font-semibold uppercase tracking-wider">ve Üzeri</p>
             </div>
         </div>
@@ -186,8 +154,7 @@
 
     </div>
 
-
-    <!-- 3. ADIM: ANA OYUN ALANI (Başlangıçta Gizli) -->
+    <!-- ANA OYUN ALANI (Başlangıçta Gizli) -->
     <main id="game-container" class="hidden flex-1 w-full max-w-7xl flex-col items-center justify-center px-4 z-10 pb-10 pt-20 no-select">
         
         <div id="instruction-text" class="text-center mb-4 md:mb-8">
@@ -274,137 +241,82 @@
         const GIF_URL = "https://i.ibb.co/8Dc7zSRf/ezgif-3f98e6a685125b54.gif";
         const GIF_DURATION = 3500;
 
-        // --- ŞUBE VE BAREMLERE GÖRE HEDİYE HAVUZLARI ---
+        // --- BAREMLERE GÖRE HEDİYE HAVUZLARI ---
         const prizePools = {
-            inegol: {
-                tier75k: [
-                    { ad: "PROFİLO PSP5UHİJ TOZ TORBASIZ SÜPÜRGE", sans: 2 },
-                    { ad: "PROFİLO PSP5U200 TOZ TORBASIZ SÜPÜRGE", sans: 2 },
-                    { ad: "TUĞRA (K) PARİS 160*230 HALI", sans: 2 },
-                    { ad: "TUĞRA (K) LARA 160*230 HALI", sans: 4 },
-                    { ad: "TUĞRA DEFNE DF05 160*230 HALI", sans: 1 },
-                    { ad: "CİHAN G-3697 36*147 CAM BOY AYNASI-SİYAH", sans: 7 }
-                ],
-                tier50k: [
-                    { ad: "SCHAFER MEISTER MULTI BLENDER SET -17 PRÇ.-KIRMIZI", sans: 6 },
-                    { ad: "HİKİNG HD11 DİKEY SÜPÜRGE", sans: 5 },
-                    { ad: "SCHAFER VENTUS PLUS SAÇ KURUTMA MAK.-SİYAH-2SE789-25027-SIY01", sans: 11 },
-                    { ad: "SCHAFER CARİNA PASLANMAZ ÇELİK SU ISITICI-KREM", sans: 6 },
-                    { ad: "LEXİCAL LSM-2571 ZAMAN AYARLI TOST MAK.2000W", sans: 9 },
-                    { ad: "İRİNA EKOSE PAMUKLU Ç.K BATTANİYE", sans: 7 },
-                    { ad: "HALİME SULTAN PETEK ULTRA Ç.K YORGAN 195*215", sans: 13 },
-                    { ad: "HALİME SULTAN PETEK Ç.K YORGAN 195*215", sans: 6 },
-                    { ad: "HALİME SULTAN SHERPA Ç.K YORGAN SETİ 195*215", sans: 13 },
-                    { ad: "HALİME SULTAN FİTİLLİ Ç.K YORGAN SETİ 195*215", sans: 2 },
-                    { ad: "VİVEN Ç.K NEVRESİM TKM", sans: 35 },
-                    { ad: "İRİNA Ç.K NEVRESİM TKM", sans: 12 }
-                ],
-                tier20k: [
-                    { ad: "XİAOMİ Mİ SMART SCALE 2 FONK.CAM TARTI", sans: 10 },
-                    { ad: "SCHAFER CHEF BLEND ÇUBUK BLENDER/ANTRASİT-SİYAH", sans: 7 },
-                    { ad: "ONVO OVFRY08 AIRFRYER FRİTÖZ 6,5 LT", sans: 2 },
-                    { ad: "VESTEL LIGHTFRY DX FRİTÖZ SİYAH 3.5 LT", sans: 1 },
-                    { ad: "VALLETTA VLT5012 RAFFLE DİJİTAL FRİTÖZ 4 LT", sans: 1 },
-                    { ad: "RUSSELL HOBBS FRY AIR&SMALL 1,8 LT", sans: 1 },
-                    { ad: "PLATOON PL-2340 SD/BT KEDİ DESENLİ IŞIKLI BLUETOOTH KULAKLIK (CAT)", sans: 7 },
-                    { ad: "HALL KAMPANYALI 100*300 JEL HALI", sans: 9 },
-                    { ad: "HALL DREAM 4008 BEJ 80*150 HALI", sans: 8 },
-                    { ad: "HALL DREAM 4004 BEYAZ 80*150 HALI", sans: 8 },
-                    { ad: "HALL DREAM 4017 TAŞ 80*150 HALI", sans: 7 },
-                    { ad: "HALL DREAM 4010 PUDRA 80*150 HALI", sans: 7 }
-                ]
-            },
-            cayirova: {
-                tier75k: [
-                    { ad: "ARNİCA ET11200 SÜPÜRGEÇ E-MAX ROSE ŞARJLI DİK SÜPÜRGE", sans: 1 }
-                ],
-                tier50k: [
-                    { ad: "SCHAFER CHEF BLEND ÇUBUK BLENDER/ANTRASİT-SİYAH", sans: 1 },
-                    { ad: "SCHAFER CHEF BLEND ÇUBUK BLENDER/KREM-SİYAH", sans: 1 },
-                    { ad: "SCHAFER CHEF BLEND ÇUBUK BLENDER/SİYAH-ROSEGOLD", sans: 1 },
-                    { ad: "HİKİNG HD11 DİKEY SÜPÜRGE", sans: 1 },
-                    { ad: "RELUX REP5736 36 CIMBIZ ŞARJLI EPİLATÖR", sans: 1 },
-                    { ad: "Vestel LightFry XXL Fritöz", sans: 1 },
-                    { ad: "Vestel LIGHTFRY X Fritöz İNOX 3.5LT", sans: 1 },
-                    { ad: "Simfer SK-6702 AirFry Smart Siyah 5 Lt Dijital", sans: 1 },
-                    { ad: "RUSSELL HOBBS FRY AİR&LARGE 5 LT", sans: 1 },
-                    { ad: "LUXELL LXAF-01 FAST FRYER FRİTÖZ", sans: 1 },
-                    { ad: "VESTEL LIGHTFRY DX FRİTÖZ SİYAH 3.5 LT", sans: 1 },
-                    { ad: "Simfer SK-6704 AirFry Smart Siyah 8 Lt Dijital", sans: 1 },
-                    { ad: "RELUX RAF7000 XXL AİRFRYER", sans: 1 },
-                    { ad: "GOLDMASTER GB-7485 EXTRA FRY AIRFRYER", sans: 1 },
-                    { ad: "SCHAFER KEYF-İ KAHVE ÇİFT TUŞLU TÜRK KAHVE MAK.", sans: 1 },
-                    { ad: "Arnica ET13213 Merlin Pro Dik Elektrikli Süpürge - Mor", sans: 1 },
-                    { ad: "PROFİLO PSP5U200 TOZ TORBASIZ SÜPÜRGE", sans: 1 },
-                    { ad: "REGAL RH 1000 SÜPÜRGE", sans: 1 },
-                    { ad: "VESTEL H20 K Elektrikli Süpürge", sans: 1 },
-                    { ad: "LEXİCAL LSM-2571 ZAMAN AYARLI TOST MAK.2000W", sans: 1 },
-                    { ad: "HİKİNG WH9 SMARTWATCH AKILLI SAAT", sans: 1 },
-                    { ad: "TUĞRA (K) GOLD 160*230 HALI", sans: 1 },
-                    { ad: "HALİME SULTAN PETEK ULTRA Ç.K YORGAN 195*215", sans: 1 },
-                    { ad: "HALİME SULTAN SHERPA Ç.K YORGAN SETİ 195*215", sans: 1 },
-                    { ad: "HALİME SULTAN FİTİLLİ Ç.K YORGAN SETİ 195*215", sans: 1 },
-                    { ad: "OLİKA 70040 JÜPİTER 8 PARÇA TENCERE SETİ", sans: 1 },
-                    { ad: "SCHAFER LİLY KAHVALTI TAKIMI 16 PARÇA-KIRMIZI", sans: 1 }
-                ],
-                tier20k: [
-                    { ad: "VESTEL V-FİT AKILLI TARTI", sans: 1 },
-                    { ad: "LATEKS KAMPANYALI 120*180 HALI", sans: 1 },
-                    { ad: "LATEKS KAMPANYALI 160*230 HALI", sans: 1 },
-                    { ad: "RAİN KAMPANYALI 80*150 HALI", sans: 1 },
-                    { ad: "LATEKS KAMPANYALI 80*150 HALI", sans: 1 },
-                    { ad: "ECOBOX DOKUMA SKOC SAÇAKLI Ç.K BATTANİYE 180*220", sans: 1 },
-                    { ad: "ECOBOX DOKUMA SKOC SAÇAKLI T.K BATTANİYE 150*200", sans: 1 },
-                    { ad: "UVİ LASTİKLİ ÇARŞAF YASTIKLI (180X200)", sans: 1 },
-                    { ad: "UVİ LASTİKLİ ÇARŞAF YASTIKLI (120X200)", sans: 1 },
-                    { ad: "UVİ LASTİKLİ ÇARŞAF YASTIKLI (100X200)", sans: 1 },
-                    { ad: "UVİ LASTİKLİ ÇARŞAF YASTIKLI (160X200)", sans: 1 },
-                    { ad: "VİVEN Ç.K NEVRESİM TKM", sans: 1 },
-                    { ad: "DEFNE NEVRESİM TAKIMI ÇİFT KİŞİLİK", sans: 1 },
-                    { ad: "FIRST CLASS FC-850 BALIK TAVASI", sans: 1 }
-                ]
-            }
+            tier20k: [
+                { ad: "XİAOMİ Mİ SMART SCALE 2 FONK.CAM TARTI", sans: 1 },
+                { ad: "LEXICAL LHC-5691 4'Ü 1 ARADA SAÇ KESME&BAKIM KİTİ LED EKRAN", sans: 1 },
+                { ad: "RAİN KAMPANYALI 80*150 HALI", sans: 1 },
+                { ad: "LATEKS KAMPANYALI 80*150 HALI", sans: 1 },
+                { ad: "LATEKS KAMPANYALI 120*180 HALI", sans: 1 },
+                { ad: "LATEKS KAMPANYALI 160*230 HALI", sans: 1 },
+                { ad: "İRİNA EKOSE PAMUKLU Ç.K BATTANİYE", sans: 1 },
+                { ad: "AKSU VİZON Ç.K BATTANİYE", sans: 1 },
+                { ad: "İRİNA FLOWER PAMUKLU Ç.K BATTANİYE", sans: 1 },
+                { ad: "ECOBOX DOKUMA SKOC SAÇAKLI Ç.K BATTANİYE 180*220", sans: 1 },
+                { ad: "ECOBOX DOKUMA SKOC SAÇAKLI T.K BATTANİYE 150*200", sans: 1 },
+                { ad: "İRİNA DESENLİ T.K FİTTED ÇARŞAF SETİ", sans: 1 },
+                { ad: "VİVEN JAKAR SATEN T.K FİTTED ÇARŞAF SETİ", sans: 1 },
+                { ad: "UVI LASTİKLİ ÇARŞAF YASTIKLI (180X200)", sans: 1 },
+                { ad: "UVI LASTİKLİ ÇARŞAF YASTIKLI (160X200)", sans: 1 },
+                { ad: "UVI LASTİKLİ ÇARŞAF YASTIKLI (100X200)", sans: 1 },
+                { ad: "UVI LASTİKLİ ÇARŞAF YASTIKLI (120X200)", sans: 1 },
+                { ad: "İRİNA Ç.K NEVRESİM TKM", sans: 1 },
+                { ad: "NESEGUL IRINA T.K NEVRESİM TKM", sans: 1 },
+                { ad: "İRİNA T.K NEVRESİM TKM", sans: 1 },
+                { ad: "HALİME SULTAN 2Lİ KAMPANYALI PASPAS TAKIMI", sans: 1 },
+                { ad: "MR SLEEP KIRPIK VİSCO YASTIK 50*70", sans: 1 },
+                { ad: "HALİME SULTAN KAMPANYALI 200*225 ÇOK AMAÇLI YATAK ÖRTÜSÜ", sans: 1 },
+                { ad: "FIRST CLASS FC-850 BALIK TAVASI", sans: 1 },
+                { ad: "FIRST CLASS FC-218 KREP TAVASI 26 CM", sans: 1 },
+                { ad: "ACAR BETTY 2 Lİ STANDLI MİNİ PASTA SETİ KAI-07647/18", sans: 1 },
+                { ad: "ACAR JOYCE 2 STANDLI MİNİ PASTA SETİ KAI-07648/18", sans: 1 },
+                { ad: "ACAR ROSS/ALORA KUPA KAI-06395/36", sans: 1 },
+                { ad: "ACAR CHERRA CASSY PORSELEN KUPA KAI-06833/36", sans: 1 },
+                { ad: "ACAR TANSY KAPAKLI KUPA KAI-07651/36", sans: 1 },
+                { ad: "ACAR PETRA KUPA KAI-06393/36", sans: 1 },
+                { ad: "ACAR MY MUG KUPA KAI-21-0177/36", sans: 1 }
+            ],
+            tier60k: [
+                { ad: "SCHAFER CHEF BLEND ÇUBUK BLENDER/ANTRASİT-SİYAH", sans: 1 },
+                { ad: "SCHAFER CHEF BLEND ÇUBUK BLENDER/KREM-SİYAH", sans: 1 },
+                { ad: "SCHAFER CHEF BLEND ÇUBUK BLENDER/SİYAH-ROSEGOLD", sans: 1 },
+                { ad: "SCHAFER KEYF-İ KAHVE ÇİFT TUŞLU TÜRK KAHVE MAK.", sans: 1 },
+                { ad: "LEXICAL LSM-2570 TOST MAK.2000W", sans: 1 },
+                { ad: "HİKİNG WH9 SMARTWATCH AKILLI SAAT", sans: 1 },
+                { ad: "HALİME SULTAN PETEK ULTRA Ç.K YORGAN 195*215", sans: 1 },
+                { ad: "HALİME SULTAN SHERPA Ç.K YORGAN SETİ 195*215", sans: 1 },
+                { ad: "HALİME SULTAN FİTİLLİ Ç.K YORGAN SETİ 195*215", sans: 1 },
+                { ad: "VİVEN Ç.K NEVRESİM TKM", sans: 1 },
+                { ad: "HOMELAND NAKIŞLI Ç.K YATAK ÖRTÜSÜ", sans: 1 },
+                { ad: "POLO LIFE T.K YORGAN+YASTIK SETİ", sans: 1 },
+                { ad: "POLO LIFE Ç.K YORGAN+YASTIK SETİ", sans: 1 },
+                { ad: "ACAR ORION YAĞLIK&SİRKELİK BAHARAT TAKIMI  ALG-07830/12", sans: 1 },
+                { ad: "ACAR MABEL YAĞLIK&SİRKELİK BAHARAT TAKIMI  ALG-07826/12", sans: 1 },
+                { ad: "ACAR AVELINE AİLE BOY ÇAYDANLIK TKM.AR-08586/6", sans: 1 },
+                { ad: "ACAR ADONIS 6 LI KAHVE FİNCANI KAI-08175/8", sans: 1 },
+                { ad: "AISHA POME/LEMON/CHERRY 6 LI KAHVE FİNCAN TKM.NG-09502/12", sans: 1 },
+                { ad: "ARNİCA ARN099-GH21803 DİVA PRO RENDELİ BLENDER SETİ-SİYAH", sans: 1 },
+                { ad: "PROFİLO TKP1002 KAHVE MAK.KIRMIZI", sans: 10 },
+                { ad: "PROFİLO TKP1001 KAHVE MAK.GÜMÜŞ", sans: 10 },
+                { ad: "KOZA 120*180 HALI", sans: 10 }
+            ],
+            tier100k: [
+                { ad: "ARNİCA ET11200 SÜPÜRGEÇ E-MAX ROSE ŞARJLI DİK SÜPÜRGE", sans: 1 },
+                { ad: "HİKİNG HD11 DİKEY SÜPÜRGE", sans: 1 },
+                { ad: "LEXICAL LLH-5585 1.000.000 ATIM IPL LAZER EPİLASYON CİHAZI", sans: 1 },
+                { ad: "KORKMAZ A1650 PERLA JR.TENCERE STI", sans: 1 },
+                { ad: "SCHAFER NEW SAVOR Y.Y.TENCERE SETİ 7 PRÇ.-SİYAH", sans: 10 },
+                { ad: "PROFİLO SÜPÜRGE", sans: 1 },
+                { ad: "KOZA 160*230 HALI", sans: 10 }
+            ]
         };
 
         let currentPool = [];
         let isProcessing = false;
-        let selectedBranchId = null;
         let selectedTierId = null;
 
-        // --- 1. ŞUBE SEÇİMİ ---
-        function selectBranch(branchDisplayName, branchId) {
-            selectedBranchId = branchId;
-            
-            document.getElementById('selected-branch-text').innerText = branchDisplayName;
-
-            document.getElementById('branch-screen').classList.add('hidden');
-            document.getElementById('entry-screen').classList.remove('hidden');
-            document.getElementById('entry-screen').classList.add('flex');
-
-            clickSound.currentTime = 0;
-            clickSound.play().catch(e => console.warn(e));
-        }
-
-        // Barem ekranından Şube ekranına geri dön
-        function backToBranch() {
-            selectedBranchId = null;
-            selectedTierId = null;
-            
-            document.querySelectorAll('.tier-card').forEach(card => card.classList.remove('selected'));
-            const startBtn = document.getElementById('start-btn');
-            startBtn.disabled = true;
-            startBtn.classList.add('bg-gray-300', 'cursor-not-allowed');
-            startBtn.classList.remove('bg-pink-600', 'hover:bg-pink-700', 'text-white');
-
-            document.getElementById('entry-screen').classList.add('hidden');
-            document.getElementById('entry-screen').classList.remove('flex');
-            document.getElementById('branch-screen').classList.remove('hidden');
-
-            clickSound.currentTime = 0;
-            clickSound.play().catch(e => console.warn(e));
-        }
-
-        // --- 2. BAREM SEÇİMİ ---
+        // --- BAREM SEÇİMİ ---
         function selectTier(tierId) {
             document.querySelectorAll('.tier-card').forEach(card => card.classList.remove('selected'));
             
@@ -422,9 +334,9 @@
         }
 
         function startGame() {
-            if (!selectedTierId || !selectedBranchId) return;
+            if (!selectedTierId) return;
 
-            currentPool = prizePools[selectedBranchId][selectedTierId];
+            currentPool = prizePools[selectedTierId];
 
             document.getElementById('entry-screen').classList.add('hidden');
             document.getElementById('entry-screen').classList.remove('flex');
@@ -498,11 +410,11 @@
             document.getElementById('game-container').classList.add('hidden');
             document.getElementById('game-container').classList.remove('flex');
             
-            // Şube seçim ekranına değil, barem (tutar) seçim ekranına geri dön
+            // Barem (tutar) seçim ekranına geri dön
             document.getElementById('entry-screen').classList.remove('hidden');
             document.getElementById('entry-screen').classList.add('flex');
             
-            // selectedBranchId sıfırlanmaz, böylece seçilen şube aynı kalır
+            // Seçimleri sıfırla
             selectedTierId = null;
             document.querySelectorAll('.tier-card').forEach(card => card.classList.remove('selected'));
             const startBtn = document.getElementById('start-btn');
