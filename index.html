@@ -44,8 +44,8 @@
             cursor: pointer;
         }
         .gift-mascot:hover {
-            transform: scale(1.05) translateY(-10px);
-            filter: drop-shadow(0 20px 20px rgba(236, 72, 153, 0.3));
+            transform: scale(1.05) translateY(-5px);
+            filter: drop-shadow(0 15px 15px rgba(236, 72, 153, 0.3));
         }
         
         .modal-content {
@@ -77,7 +77,12 @@
             border-color: #db2777;
             background-color: #fdf2f8;
             box-shadow: 0 10px 25px -5px rgba(219, 39, 119, 0.5);
-            transform: scale(1.05);
+            transform: scale(1.02);
+        }
+        @media (min-width: 768px) {
+            .tier-card.selected {
+                transform: scale(1.05);
+            }
         }
         .tier-card.selected .check-icon {
             opacity: 1;
@@ -89,106 +94,106 @@
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col items-center justify-center text-gray-800 relative overflow-hidden">
+<body class="min-h-screen flex flex-col items-center justify-center text-gray-800 relative overflow-x-hidden">
 
     <canvas id="confetti-canvas"></canvas>
 
-    <header class="w-full text-center pt-6 pb-2 z-10 absolute top-0 left-0 no-select">
+    <header class="w-full text-center pt-4 md:pt-6 pb-2 z-10 absolute top-0 left-0 no-select">
         <h1 class="text-3xl md:text-5xl font-extrabold text-pink-600 drop-shadow-sm tracking-wide">HEDEF AVM</h1>
-        <p class="text-pink-500 font-bold text-sm md:text-lg mt-1 tracking-widest">SÜRPRİZ HEDİYE OYUNU</p>
+        <p class="text-pink-500 font-bold text-xs sm:text-sm md:text-lg mt-1 tracking-widest">SÜRPRİZ HEDİYE OYUNU</p>
     </header>
 
     <!-- GİRİŞ / BAREM SEÇİM EKRANI -->
-    <div id="entry-screen" class="flex w-full max-w-6xl px-4 z-20 flex-col items-center justify-center h-screen pt-20 no-select">
+    <div id="entry-screen" class="flex w-full max-w-6xl px-4 z-20 flex-col items-center justify-center min-h-screen pt-28 pb-20 no-select">
         
-        <div class="text-center mb-8 relative w-full flex flex-col items-center">
-            <h2 class="text-3xl md:text-4xl font-bold text-gray-800 bg-white/80 backdrop-blur-sm px-8 py-2 rounded-full inline-block shadow-sm">
+        <div class="text-center mb-6 md:mb-8 relative w-full flex flex-col items-center">
+            <h2 class="text-xl sm:text-2xl md:text-4xl font-bold text-gray-800 bg-white/80 backdrop-blur-sm px-6 py-2 rounded-full inline-block shadow-sm">
                 Alışveriş Tutarınızı Seçiniz
             </h2>
-            <p class="text-gray-600 mt-2 font-medium bg-white/80 backdrop-blur-sm px-4 py-1 rounded-full inline-block shadow-sm">
+            <p class="text-gray-600 mt-2 text-xs sm:text-sm md:text-base font-medium bg-white/80 backdrop-blur-sm px-4 py-1 rounded-full inline-block shadow-sm">
                 Hediye havuzu seçiminize göre belirlenecektir.
             </p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full mb-10">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6 w-full mb-8 md:mb-10 max-w-md sm:max-w-none mx-auto">
             <!-- 20.000 TL Seçeneği -->
-            <div onclick="selectTier('tier20k')" id="card-tier20k" class="tier-card bg-white/90 backdrop-blur-md rounded-3xl p-6 border-4 border-transparent shadow-xl flex flex-col items-center justify-center text-center relative h-64 md:h-80 group">
-                <div class="check-icon opacity-0 absolute top-4 right-4 bg-pink-500 text-white rounded-full w-8 h-8 flex items-center justify-center transition-opacity shadow-md">
+            <div onclick="selectTier('tier20k')" id="card-tier20k" class="tier-card bg-white/90 backdrop-blur-md rounded-2xl md:rounded-3xl p-4 md:p-6 border-4 border-transparent shadow-xl flex flex-col items-center justify-center text-center relative h-36 sm:h-56 md:h-80 group">
+                <div class="check-icon opacity-0 absolute top-2 right-2 md:top-4 md:right-4 bg-pink-500 text-white rounded-full w-6 h-6 md:w-8 md:h-8 flex items-center justify-center transition-opacity shadow-md text-xs md:text-base">
                     <i class="fas fa-check"></i>
                 </div>
-                <div class="w-20 h-20 bg-pink-100 rounded-full flex items-center justify-center mb-4 text-pink-500 text-3xl group-hover:scale-110 transition-transform shadow-inner">
+                <div class="w-12 h-12 md:w-20 md:h-20 bg-pink-100 rounded-full flex items-center justify-center mb-2 md:mb-4 text-pink-500 text-xl md:text-3xl group-hover:scale-110 transition-transform shadow-inner">
                     <i class="fas fa-bag-shopping"></i>
                 </div>
-                <h3 class="text-2xl font-bold text-gray-800 mb-2">20.000 TL</h3>
-                <p class="text-sm text-gray-500 font-semibold uppercase tracking-wider">ve Üzeri</p>
+                <h3 class="text-xl md:text-2xl font-bold text-gray-800 mb-1 md:mb-2">20.000 TL</h3>
+                <p class="text-[10px] md:text-sm text-gray-500 font-semibold uppercase tracking-wider">ve Üzeri</p>
             </div>
 
             <!-- 60.000 TL Seçeneği -->
-            <div onclick="selectTier('tier60k')" id="card-tier60k" class="tier-card bg-white/90 backdrop-blur-md rounded-3xl p-6 border-4 border-transparent shadow-xl flex flex-col items-center justify-center text-center relative h-64 md:h-80 group">
-                <div class="check-icon opacity-0 absolute top-4 right-4 bg-pink-500 text-white rounded-full w-8 h-8 flex items-center justify-center transition-opacity shadow-md">
+            <div onclick="selectTier('tier60k')" id="card-tier60k" class="tier-card bg-white/90 backdrop-blur-md rounded-2xl md:rounded-3xl p-4 md:p-6 border-4 border-transparent shadow-xl flex flex-col items-center justify-center text-center relative h-36 sm:h-56 md:h-80 group">
+                <div class="check-icon opacity-0 absolute top-2 right-2 md:top-4 md:right-4 bg-pink-500 text-white rounded-full w-6 h-6 md:w-8 md:h-8 flex items-center justify-center transition-opacity shadow-md text-xs md:text-base">
                     <i class="fas fa-check"></i>
                 </div>
-                <div class="w-20 h-20 bg-purple-100 rounded-full flex items-center justify-center mb-4 text-purple-500 text-3xl group-hover:scale-110 transition-transform shadow-inner">
+                <div class="w-12 h-12 md:w-20 md:h-20 bg-purple-100 rounded-full flex items-center justify-center mb-2 md:mb-4 text-purple-500 text-xl md:text-3xl group-hover:scale-110 transition-transform shadow-inner">
                     <i class="fas fa-cart-shopping"></i>
                 </div>
-                <h3 class="text-2xl font-bold text-gray-800 mb-2">60.000 TL</h3>
-                <p class="text-sm text-gray-500 font-semibold uppercase tracking-wider">ve Üzeri</p>
+                <h3 class="text-xl md:text-2xl font-bold text-gray-800 mb-1 md:mb-2">60.000 TL</h3>
+                <p class="text-[10px] md:text-sm text-gray-500 font-semibold uppercase tracking-wider">ve Üzeri</p>
             </div>
 
             <!-- 100.000 TL Seçeneği -->
-            <div onclick="selectTier('tier100k')" id="card-tier100k" class="tier-card bg-white/90 backdrop-blur-md rounded-3xl p-6 border-4 border-transparent shadow-xl flex flex-col items-center justify-center text-center relative h-64 md:h-80 group">
-                <div class="check-icon opacity-0 absolute top-4 right-4 bg-pink-500 text-white rounded-full w-8 h-8 flex items-center justify-center transition-opacity shadow-md">
+            <div onclick="selectTier('tier100k')" id="card-tier100k" class="tier-card bg-white/90 backdrop-blur-md rounded-2xl md:rounded-3xl p-4 md:p-6 border-4 border-transparent shadow-xl flex flex-col items-center justify-center text-center relative h-36 sm:h-56 md:h-80 group">
+                <div class="check-icon opacity-0 absolute top-2 right-2 md:top-4 md:right-4 bg-pink-500 text-white rounded-full w-6 h-6 md:w-8 md:h-8 flex items-center justify-center transition-opacity shadow-md text-xs md:text-base">
                     <i class="fas fa-check"></i>
                 </div>
-                <div class="w-20 h-20 bg-yellow-100 rounded-full flex items-center justify-center mb-4 text-yellow-600 text-3xl group-hover:scale-110 transition-transform shadow-inner">
+                <div class="w-12 h-12 md:w-20 md:h-20 bg-yellow-100 rounded-full flex items-center justify-center mb-2 md:mb-4 text-yellow-600 text-xl md:text-3xl group-hover:scale-110 transition-transform shadow-inner">
                     <i class="fas fa-crown"></i>
                 </div>
-                <h3 class="text-3xl font-extrabold text-gray-800 mb-2">100.000 TL</h3>
-                <p class="text-sm text-gray-500 font-semibold uppercase tracking-wider">ve Üzeri</p>
+                <h3 class="text-2xl md:text-3xl font-extrabold text-gray-800 mb-1 md:mb-2">100.000 TL</h3>
+                <p class="text-[10px] md:text-sm text-gray-500 font-semibold uppercase tracking-wider">ve Üzeri</p>
             </div>
         </div>
 
-        <button onclick="startGame()" id="start-btn" class="bg-gray-300 text-white font-bold py-4 px-12 rounded-full text-xl shadow-lg transition-all transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none" disabled>
+        <button onclick="startGame()" id="start-btn" class="bg-gray-300 text-white font-bold py-3 px-8 md:py-4 md:px-12 rounded-full text-lg md:text-xl shadow-lg transition-all transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none" disabled>
             OYUNA BAŞLA
         </button>
 
     </div>
 
     <!-- ANA OYUN ALANI (Başlangıçta Gizli) -->
-    <main id="game-container" class="hidden flex-1 w-full max-w-7xl flex-col items-center justify-center px-4 z-10 pb-10 pt-20 no-select">
+    <main id="game-container" class="hidden flex-1 w-full max-w-7xl flex-col items-center justify-center min-h-screen px-2 sm:px-4 z-10 pt-28 pb-20 no-select">
         
-        <div id="instruction-text" class="text-center mb-4 md:mb-8">
-            <span class="inline-block bg-white/90 backdrop-blur-md px-8 py-3 rounded-full shadow-lg text-lg md:text-2xl font-bold text-pink-600 border-2 border-pink-200">
+        <div id="instruction-text" class="text-center mb-6 md:mb-8">
+            <span class="inline-block bg-white/90 backdrop-blur-md px-6 py-2 md:px-8 md:py-3 rounded-full shadow-lg text-base md:text-2xl font-bold text-pink-600 border-2 border-pink-200">
                 Hedefix ile hediyeni kap!
             </span>
         </div>
 
-        <div id="game-area" class="grid grid-cols-3 gap-2 md:gap-8 w-full items-end justify-items-center h-auto">
+        <div id="game-area" class="grid grid-cols-3 gap-2 sm:gap-4 md:gap-8 w-full items-end justify-items-center h-auto">
             
             <div class="gift-mascot group flex flex-col items-center w-full" onclick="startAnimation(1)">
-                <span class="mb-2 md:mb-6 font-bold text-pink-600 bg-white px-4 py-1 md:px-6 md:py-2 rounded-full shadow-lg border border-pink-100 text-xs md:text-lg group-hover:bg-pink-600 group-hover:text-white transition-colors z-20">
+                <span class="mb-2 md:mb-6 font-bold text-pink-600 bg-white px-2 py-1 sm:px-4 md:px-6 md:py-2 rounded-full shadow-lg border border-pink-100 text-[10px] sm:text-xs md:text-lg group-hover:bg-pink-600 group-hover:text-white transition-colors z-20 whitespace-nowrap">
                     1. Seçim
                 </span>
-                <div class="relative w-full h-48 md:h-[500px] flex items-end justify-center">
-                    <img src="https://i.ibb.co/d40mGZWM/freepik-a-cute-pink-female-mascot-with-big-sparkling-eyes-9768.jpg" alt="Maskot 1" class="h-full w-auto object-contain filter drop-shadow-2xl hover:brightness-105 transition-all duration-300 rounded-2xl pointer-events-none">
+                <div class="relative w-full h-32 sm:h-48 md:h-[400px] lg:h-[500px] flex items-end justify-center">
+                    <img src="https://i.ibb.co/d40mGZWM/freepik-a-cute-pink-female-mascot-with-big-sparkling-eyes-9768.jpg" alt="Maskot 1" class="h-full w-auto max-w-full object-contain filter drop-shadow-xl md:drop-shadow-2xl hover:brightness-105 transition-all duration-300 rounded-2xl pointer-events-none">
                 </div>
             </div>
 
             <div class="gift-mascot group flex flex-col items-center w-full" onclick="startAnimation(2)">
-                <span class="mb-2 md:mb-6 font-bold text-pink-600 bg-white px-4 py-1 md:px-6 md:py-2 rounded-full shadow-lg border border-pink-100 text-xs md:text-lg group-hover:bg-pink-600 group-hover:text-white transition-colors z-20">
+                <span class="mb-2 md:mb-6 font-bold text-pink-600 bg-white px-2 py-1 sm:px-4 md:px-6 md:py-2 rounded-full shadow-lg border border-pink-100 text-[10px] sm:text-xs md:text-lg group-hover:bg-pink-600 group-hover:text-white transition-colors z-20 whitespace-nowrap">
                     2. Seçim
                 </span>
-                <div class="relative w-full h-48 md:h-[500px] flex items-end justify-center">
-                    <img src="https://i.ibb.co/mr2QxJ3g/freepik-pink-female-mascot-with-large-glittering-eyes-pres-9764.jpg" alt="Maskot 2" class="h-full w-auto object-contain filter drop-shadow-2xl hover:brightness-105 transition-all duration-300 rounded-2xl pointer-events-none">
+                <div class="relative w-full h-32 sm:h-48 md:h-[400px] lg:h-[500px] flex items-end justify-center">
+                    <img src="https://i.ibb.co/mr2QxJ3g/freepik-pink-female-mascot-with-large-glittering-eyes-pres-9764.jpg" alt="Maskot 2" class="h-full w-auto max-w-full object-contain filter drop-shadow-xl md:drop-shadow-2xl hover:brightness-105 transition-all duration-300 rounded-2xl pointer-events-none">
                 </div>
             </div>
 
             <div class="gift-mascot group flex flex-col items-center w-full" onclick="startAnimation(3)">
-                <span class="mb-2 md:mb-6 font-bold text-pink-600 bg-white px-4 py-1 md:px-6 md:py-2 rounded-full shadow-lg border border-pink-100 text-xs md:text-lg group-hover:bg-pink-600 group-hover:text-white transition-colors z-20">
+                <span class="mb-2 md:mb-6 font-bold text-pink-600 bg-white px-2 py-1 sm:px-4 md:px-6 md:py-2 rounded-full shadow-lg border border-pink-100 text-[10px] sm:text-xs md:text-lg group-hover:bg-pink-600 group-hover:text-white transition-colors z-20 whitespace-nowrap">
                     3. Seçim
                 </span>
-                <div class="relative w-full h-48 md:h-[500px] flex items-end justify-center">
-                    <img src="https://i.ibb.co/xq6jMBKT/freepik-pink-female-mascot-with-large-sparkling-eyes-in-wh-9771.jpg" alt="Maskot 3" class="h-full w-auto object-contain filter drop-shadow-2xl hover:brightness-105 transition-all duration-300 rounded-2xl pointer-events-none">
+                <div class="relative w-full h-32 sm:h-48 md:h-[400px] lg:h-[500px] flex items-end justify-center">
+                    <img src="https://i.ibb.co/xq6jMBKT/freepik-pink-female-mascot-with-large-sparkling-eyes-in-wh-9771.jpg" alt="Maskot 3" class="h-full w-auto max-w-full object-contain filter drop-shadow-xl md:drop-shadow-2xl hover:brightness-105 transition-all duration-300 rounded-2xl pointer-events-none">
                 </div>
             </div>
 
@@ -197,35 +202,35 @@
     </main>
 
     <!-- GIF Animasyon Ekranı -->
-    <div id="gif-overlay" class="fixed inset-0 z-40 flex items-center justify-center bg-black/85 backdrop-blur-sm hidden flex-col no-select">
-        <img id="animation-gif" src="" alt="Hediye Hazırlanıyor..." class="w-full max-w-md h-auto object-contain drop-shadow-2xl rounded-2xl pointer-events-none">
-        <p class="text-white font-bold text-2xl mt-6 animate-pulse tracking-wide">Hediye Hazırlanıyor...</p>
+    <div id="gif-overlay" class="fixed inset-0 z-40 flex items-center justify-center bg-black/85 backdrop-blur-sm hidden flex-col no-select p-4">
+        <img id="animation-gif" src="" alt="Hediye Hazırlanıyor..." class="w-full max-w-[250px] md:max-w-md h-auto object-contain drop-shadow-2xl rounded-2xl pointer-events-none">
+        <p class="text-white font-bold text-lg md:text-2xl mt-6 animate-pulse tracking-wide text-center">Hediye Hazırlanıyor...</p>
     </div>
 
     <!-- Sonuç Modalı -->
-    <div id="result-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-md hidden no-select">
-        <div class="modal-content bg-white rounded-[2.5rem] p-8 max-w-md w-[90%] text-center shadow-2xl relative border-8 border-pink-200">
-            <div class="absolute -top-14 left-1/2 transform -translate-x-1/2 w-28 h-28 bg-gradient-to-br from-pink-400 to-pink-600 rounded-full flex items-center justify-center border-[6px] border-white shadow-xl animate-bounce">
-                <i class="fas fa-gift text-6xl text-white"></i>
+    <div id="result-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-md hidden no-select px-4">
+        <div class="modal-content bg-white rounded-[2rem] md:rounded-[2.5rem] p-6 md:p-8 max-w-md w-full text-center shadow-2xl relative border-[6px] md:border-8 border-pink-200 mt-10 md:mt-0">
+            <div class="absolute -top-12 md:-top-14 left-1/2 transform -translate-x-1/2 w-20 h-20 md:w-28 md:h-28 bg-gradient-to-br from-pink-400 to-pink-600 rounded-full flex items-center justify-center border-4 md:border-[6px] border-white shadow-xl animate-bounce">
+                <i class="fas fa-gift text-4xl md:text-6xl text-white"></i>
             </div>
 
-            <h2 class="text-3xl md:text-4xl font-extrabold text-gray-800 mt-12 mb-2 tracking-tight">TEBRİKLER!</h2>
-            <p class="text-pink-500 font-semibold mb-6 text-lg">Şanslı seçiminden kazandığın ürün:</p>
+            <h2 class="text-2xl md:text-4xl font-extrabold text-gray-800 mt-8 md:mt-12 mb-2 tracking-tight">TEBRİKLER!</h2>
+            <p class="text-pink-500 font-semibold mb-4 md:mb-6 text-sm md:text-lg">Şanslı seçiminden kazandığın ürün:</p>
             
-            <div class="bg-gradient-to-r from-pink-50 to-rose-50 p-6 rounded-2xl border-2 border-pink-200 mb-8 transform rotate-1 hover:rotate-0 transition-transform shadow-inner">
-                <p id="won-prize-name" class="text-xl md:text-2xl font-black text-pink-600 uppercase break-words leading-tight">...</p>
+            <div class="bg-gradient-to-r from-pink-50 to-rose-50 p-4 md:p-6 rounded-xl md:rounded-2xl border-2 border-pink-200 mb-6 md:mb-8 transform rotate-1 hover:rotate-0 transition-transform shadow-inner">
+                <p id="won-prize-name" class="text-lg md:text-2xl font-black text-pink-600 uppercase break-words leading-tight">...</p>
             </div>
             
-            <div class="border-t-2 border-gray-100 pt-6">
-                <p class="text-sm text-gray-500 mb-5 font-medium bg-gray-50 p-2 rounded-lg">Lütfen bu ekranı görevliye gösteriniz.</p>
-                <button onclick="resetGame()" class="w-full bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-bold py-4 rounded-2xl transition-all shadow-lg shadow-pink-200/50 text-xl transform hover:scale-[1.02]">
+            <div class="border-t-2 border-gray-100 pt-4 md:pt-6">
+                <p class="text-[11px] md:text-sm text-gray-500 mb-4 md:mb-5 font-medium bg-gray-50 p-2 rounded-lg">Lütfen bu ekranı görevliye gösteriniz.</p>
+                <button onclick="resetGame()" class="w-full bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-bold py-3 md:py-4 rounded-xl md:rounded-2xl transition-all shadow-lg shadow-pink-200/50 text-lg md:text-xl transform hover:scale-[1.02]">
                     Yeni Oyun Başlat
                 </button>
             </div>
         </div>
     </div>
 
-    <footer class="w-full text-center py-4 text-xs font-semibold text-pink-400/80 absolute bottom-0 left-0 bg-white/30 backdrop-blur-sm">
+    <footer class="w-full text-center py-4 text-[10px] sm:text-xs font-semibold text-pink-400/80 absolute bottom-0 left-0 bg-white/30 backdrop-blur-sm z-10 pointer-events-none">
         &copy; 2025 Hedef AVM
     </footer>
 
