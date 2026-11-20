@@ -2,483 +2,1228 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hedef AVM - Şanslı Kutu Oyunu</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Hedef AVM — Hedefix Şanslı Kutu Oyunu</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        display: ['Outfit', 'sans-serif'],
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        hedef: {
+                            50: '#fff1f7',
+                            100: '#ffe4f0',
+                            200: '#ffc8e1',
+                            300: '#ff9bc8',
+                            400: '#ff5ea4',
+                            500: '#f22e84',
+                            600: '#db176d',
+                            700: '#b80d57',
+                            800: '#980e49',
+                            900: '#7f1140',
+                            ink: '#2b1020',
+                        }
+                    }
+                }
+            }
+        };
+    </script>
+
     <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-image: url('https://i.ibb.co/Ps6qQZCk/23e23ed2323.png');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
+        :root {
+            --bg-studio: url('https://i.ibb.co/23XPxhQC/bg-studio.jpg');
+            --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+            --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
         }
 
-        body::before {
-            content: "";
+        * {
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html {
+            min-height: 100%;
+            min-height: 100dvh;
+            background-color: #fdebf2;
+        }
+
+        body {
+            min-height: 100%;
+            min-height: 100dvh;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            color: #2b1020;
+            background-color: transparent;
+            overflow-x: hidden;
+        }
+
+        /* Animated luxury studio background */
+        .studio-bg {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url('https://www.upload.ee/image/18878921/23e23ed2323.png');
+            inset: -4%;
+            background-image: var(--bg-studio);
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            z-index: -1;
-            animation: backgroundZoom 20s infinite alternate ease-in-out;
+            z-index: 0;
+            animation: studioKenBurns 26s ease-in-out infinite alternate;
             will-change: transform;
         }
 
-        @keyframes backgroundZoom {
-            0% { transform: scale(1); }
-            100% { transform: scale(1.15); }
+        .studio-vignette {
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(circle at 50% 25%, rgba(255, 255, 255, 0.34) 0%, rgba(255, 241, 247, 0.12) 60%, rgba(219, 23, 109, 0.08) 100%);
+            z-index: 1;
+            pointer-events: none;
         }
-        
-        .gift-mascot {
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+        @keyframes studioKenBurns {
+            0% { transform: scale(1) translate3d(0, 0, 0); }
+            100% { transform: scale(1.07) translate3d(-1.2%, -0.8%, 0); }
+        }
+
+        /* Ambient floating sparkles */
+        .ambient-sparkle {
+            position: fixed;
+            border-radius: 9999px;
+            pointer-events: none;
+            z-index: 2;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.95) 0%, rgba(255, 198, 224, 0.5) 45%, rgba(255, 198, 224, 0) 75%);
+            animation: sparkleDrift var(--dur, 10s) ease-in-out infinite;
+            animation-delay: var(--delay, 0s);
+            opacity: 0;
+        }
+
+        @keyframes sparkleDrift {
+            0%, 100% { transform: translate3d(0, 12px, 0) scale(0.7); opacity: 0; }
+            25%, 75% { opacity: 0.75; }
+            50% { transform: translate3d(var(--dx, 14px), -26px, 0) scale(1.15); opacity: 0.95; }
+        }
+
+        /* Glassmorphism cards */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.78);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            box-shadow:
+                0 14px 36px -12px rgba(184, 13, 87, 0.14),
+                0 4px 12px -4px rgba(43, 16, 32, 0.05),
+                inset 0 1px 0 rgba(255, 255, 255, 0.95);
+        }
+
+        /* Tier Cards */
+        .tier-card {
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.38s var(--ease-spring), box-shadow 0.35s var(--ease-smooth), border-color 0.25s ease, background-color 0.25s ease;
             cursor: pointer;
+            animation: cardReveal 0.65s var(--ease-smooth) backwards;
+            animation-delay: var(--stagger, 0ms);
         }
-        .gift-mascot:hover {
-            transform: scale(1.05) translateY(-5px);
-            filter: drop-shadow(0 15px 15px rgba(236, 72, 153, 0.3));
+
+        .tier-card::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -130%;
+            width: 75%;
+            height: 100%;
+            background: linear-gradient(105deg, transparent 20%, rgba(255, 255, 255, 0.65) 50%, transparent 80%);
+            transform: skewX(-18deg);
+            transition: left 0.7s var(--ease-smooth);
+            pointer-events: none;
         }
-        
-        .modal-content {
-            animation: popIn 0.4s ease-out;
+
+        .tier-card:hover::after {
+            left: 145%;
         }
-        @keyframes popIn {
-            0% { transform: scale(0.8); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
+
+        .tier-card:hover {
+            transform: translateY(-6px);
+            box-shadow:
+                0 24px 44px -14px rgba(219, 23, 109, 0.24),
+                0 8px 18px -6px rgba(43, 16, 32, 0.08);
+        }
+
+        .tier-card.selected {
+            border-color: #db176d;
+            background: linear-gradient(160deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 241, 247, 0.95) 100%);
+            box-shadow:
+                0 24px 48px -12px rgba(219, 23, 109, 0.34),
+                0 0 0 3px rgba(242, 46, 132, 0.16);
+            transform: translateY(-6px) scale(1.015);
+        }
+
+        .tier-card.selected.tier-vip {
+            border-color: #d97706;
+            background: linear-gradient(160deg, rgba(255, 255, 255, 0.97) 0%, rgba(255, 251, 235, 0.96) 100%);
+            box-shadow:
+                0 24px 48px -12px rgba(217, 119, 6, 0.30),
+                0 0 0 3px rgba(245, 158, 11, 0.20);
+        }
+
+        .tier-card .check-badge {
+            transform: scale(0.4) rotate(-25deg);
+            opacity: 0;
+            transition: transform 0.35s var(--ease-spring), opacity 0.22s ease;
+        }
+
+        .tier-card.selected .check-badge {
+            transform: scale(1) rotate(0deg);
+            opacity: 1;
+        }
+
+        @keyframes cardReveal {
+            0% { opacity: 0; transform: translateY(22px) scale(0.96); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* Primary CTA Shimmer */
+        .cta-btn {
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.32s var(--ease-spring), box-shadow 0.3s ease, background 0.3s ease, opacity 0.25s ease;
+        }
+
+        .cta-btn:not(:disabled) {
+            background: linear-gradient(135deg, #f22e84 0%, #db176d 50%, #e11d74 100%);
+            box-shadow:
+                0 16px 32px -8px rgba(219, 23, 109, 0.45),
+                inset 0 1px 0 rgba(255, 255, 255, 0.35);
+        }
+
+        .cta-btn:not(:disabled)::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(110deg, transparent 25%, rgba(255, 255, 255, 0.36) 50%, transparent 75%);
+            transform: translateX(-120%);
+            animation: btnShimmer 3.2s ease-in-out infinite;
+        }
+
+        .cta-btn:not(:disabled):hover {
+            transform: translateY(-2px) scale(1.03);
+            box-shadow:
+                0 22px 38px -8px rgba(219, 23, 109, 0.55),
+                inset 0 1px 0 rgba(255, 255, 255, 0.45);
+        }
+
+        .cta-btn:not(:disabled):active {
+            transform: translateY(0) scale(0.98);
+        }
+
+        @keyframes btnShimmer {
+            0%, 55% { transform: translateX(-120%); }
+            100% { transform: translateX(140%); }
+        }
+
+        /* Hedefix Mascot Stage Cards */
+        .mascot-slot {
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.42s var(--ease-spring), opacity 0.35s ease, filter 0.35s ease;
+            outline: none;
+        }
+
+        .mascot-aura {
+            position: absolute;
+            left: 50%;
+            top: 52%;
+            width: 78%;
+            aspect-ratio: 1 / 1;
+            transform: translate(-50%, -50%) scale(0.82);
+            border-radius: 9999px;
+            background: radial-gradient(circle, rgba(255, 118, 179, 0.35) 0%, rgba(253, 224, 71, 0.16) 48%, rgba(255, 255, 255, 0) 72%);
+            opacity: 0.55;
+            transition: transform 0.45s var(--ease-spring), opacity 0.35s ease;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .mascot-floor-shadow {
+            width: 62%;
+            height: 18px;
+            margin: -6px auto 0;
+            border-radius: 9999px;
+            background: radial-gradient(ellipse at center, rgba(152, 14, 73, 0.24) 0%, rgba(152, 14, 73, 0) 72%);
+            transition: transform 0.42s var(--ease-spring), opacity 0.35s ease;
+            pointer-events: none;
+        }
+
+        .mascot-float {
+            animation: mascotIdle 3.8s ease-in-out infinite;
+            animation-delay: var(--float-delay, 0s);
+            will-change: transform;
+        }
+
+        .mascot-img {
+            filter: drop-shadow(0 18px 24px rgba(152, 14, 73, 0.18));
+            transition: transform 0.42s var(--ease-spring), filter 0.35s ease;
+            will-change: transform;
+        }
+
+        .mascot-slot:hover .mascot-aura,
+        .mascot-slot:focus-visible .mascot-aura {
+            transform: translate(-50%, -50%) scale(1.16);
+            opacity: 1;
+        }
+
+        .mascot-slot:hover .mascot-img,
+        .mascot-slot:focus-visible .mascot-img {
+            transform: translateY(-14px) scale(1.06) rotate(var(--tilt, -2deg));
+            filter: drop-shadow(0 28px 34px rgba(219, 23, 109, 0.34));
+        }
+
+        .mascot-slot:hover .mascot-floor-shadow,
+        .mascot-slot:focus-visible .mascot-floor-shadow {
+            transform: scale(0.84);
+            opacity: 0.45;
+        }
+
+        .mascot-slot:active .mascot-img {
+            transform: translateY(-4px) scale(0.97);
+        }
+
+        /* 3 Hedefix Mascot Boxes (Mobilde ferah yatay kartlar, Masaüstünde 3'lü sahne) */
+        .mascot-aura.aura-pink {
+            background: radial-gradient(circle, rgba(242, 46, 132, 0.36) 0%, rgba(255, 155, 200, 0.16) 48%, rgba(255, 255, 255, 0) 72%);
+        }
+        .mascot-aura.aura-violet {
+            background: radial-gradient(circle, rgba(168, 85, 247, 0.34) 0%, rgba(232, 121, 249, 0.16) 48%, rgba(255, 255, 255, 0) 72%);
+        }
+        .mascot-aura.aura-gold {
+            background: radial-gradient(circle, rgba(245, 158, 11, 0.34) 0%, rgba(253, 224, 71, 0.18) 48%, rgba(255, 255, 255, 0) 72%);
+        }
+
+        .mascot-slot.dimmed {
+            opacity: 0.3;
+            transform: scale(0.92);
+            pointer-events: none;
+        }
+
+        /* Mobile-only horizontal showcase card for Hedefix boxes */
+        @media (max-width: 639px) {
+            .mascot-slot {
+                background: rgba(255, 255, 255, 0.82);
+                backdrop-filter: blur(18px);
+                -webkit-backdrop-filter: blur(18px);
+                border: 1.5px solid rgba(255, 255, 255, 0.95);
+                box-shadow:
+                    0 14px 32px -12px rgba(184, 13, 87, 0.16),
+                    0 4px 12px -4px rgba(43, 16, 32, 0.06),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.95);
+            }
+            .mascot-slot:active {
+                transform: scale(0.98);
+                border-color: #db176d;
+                background: rgba(255, 241, 247, 0.95);
+            }
+            .mascot-slot:hover .mascot-img,
+            .mascot-slot:focus-visible .mascot-img {
+                transform: scale(1.06) translateY(-3px);
+            }
+        }
+
+        @keyframes mascotIdle {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-9px); }
+        }
+
+        /* Opening Suspense Overlay */
+        .sunburst-rays {
+            position: absolute;
+            width: min(86vw, 560px);
+            height: min(86vw, 560px);
+            border-radius: 9999px;
+            background: repeating-conic-gradient(
+                from 0deg,
+                rgba(255, 214, 234, 0.38) 0deg 12deg,
+                rgba(255, 255, 255, 0) 12deg 24deg
+            );
+            mask-image: radial-gradient(circle, rgba(0,0,0,1) 18%, rgba(0,0,0,0) 70%);
+            -webkit-mask-image: radial-gradient(circle, rgba(0,0,0,1) 18%, rgba(0,0,0,0) 70%);
+            animation: spinSlow 10s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes spinSlow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .suspense-shake {
+            animation: excitingShake 0.62s ease-in-out infinite;
+            will-change: transform;
+        }
+
+        @keyframes excitingShake {
+            0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg) scale(1); }
+            15% { transform: translate3d(-6px, -6px, 0) rotate(-4.5deg) scale(1.04); }
+            30% { transform: translate3d(7px, -10px, 0) rotate(4.5deg) scale(1.07); }
+            45% { transform: translate3d(-7px, -4px, 0) rotate(-3.5deg) scale(1.05); }
+            60% { transform: translate3d(6px, -8px, 0) rotate(3.5deg) scale(1.08); }
+            75% { transform: translate3d(-4px, -2px, 0) rotate(-2deg) scale(1.03); }
+        }
+
+        /* Win Modal Pop & Celebration */
+        .modal-card-enter {
+            animation: modalPop 0.55s var(--ease-spring) forwards;
+        }
+
+        @keyframes modalPop {
+            0% { opacity: 0; transform: scale(0.76) translateY(28px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .win-mascot-bounce {
+            animation: winJump 2.2s ease-in-out infinite;
+            filter: drop-shadow(0 18px 26px rgba(219, 23, 109, 0.28));
+        }
+
+        @keyframes winJump {
+            0%, 100% { transform: translateY(0) rotate(-1deg); }
+            50% { transform: translateY(-10px) rotate(1.5deg); }
+        }
+
+        .prize-ticket {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, #fff5fa 0%, #ffffff 48%, #fff8e7 100%);
+        }
+
+        .prize-ticket::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(115deg, transparent 30%, rgba(255, 255, 255, 0.85) 50%, transparent 70%);
+            transform: translateX(-130%);
+            animation: ticketGlint 3.6s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes ticketGlint {
+            0%, 50% { transform: translateX(-130%); }
+            100% { transform: translateX(140%); }
+        }
+
+        /* Screen transitions */
+        .screen-fade-in {
+            animation: screenIn 0.45s var(--ease-smooth) forwards;
+        }
+
+        @keyframes screenIn {
+            0% { opacity: 0; transform: translateY(14px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Custom sleek scrollbar */
+        .custom-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scroll::-webkit-scrollbar-track {
+            background: rgba(242, 46, 132, 0.06);
+            border-radius: 9999px;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: rgba(219, 23, 109, 0.35);
+            border-radius: 9999px;
         }
 
         #confetti-canvas {
             position: fixed;
-            top: 0;
-            left: 0;
+            inset: 0;
             width: 100%;
             height: 100%;
             pointer-events: none;
-            z-index: 50;
+            z-index: 60;
         }
 
-        .tier-card {
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-        .tier-card:hover {
-            transform: translateY(-5px);
-        }
-        .tier-card.selected {
-            border-color: #db2777;
-            background-color: #fdf2f8;
-            box-shadow: 0 10px 25px -5px rgba(219, 39, 119, 0.5);
-            transform: scale(1.02);
-        }
-        @media (min-width: 768px) {
-            .tier-card.selected {
-                transform: scale(1.05);
-            }
-        }
-        .tier-card.selected .check-icon {
-            opacity: 1;
-        }
-        
         .no-select {
             user-select: none;
             -webkit-user-select: none;
         }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
     </style>
 </head>
-<body class="min-h-screen flex flex-col items-center justify-center text-gray-800 relative overflow-x-hidden">
+<body class="min-h-[100dvh] flex flex-col relative no-select">
 
-    <canvas id="confetti-canvas"></canvas>
+    <!-- Background Layers -->
+    <div class="studio-bg" aria-hidden="true"></div>
+    <div class="studio-vignette" aria-hidden="true"></div>
+    <div id="ambient-layer" aria-hidden="true"></div>
+    <canvas id="confetti-canvas" aria-hidden="true"></canvas>
 
-    <header class="w-full text-center pt-4 md:pt-[4vh] pb-2 z-10 absolute top-0 left-0 no-select">
-        <h1 class="text-3xl md:text-5xl lg:text-6xl font-extrabold text-pink-600 drop-shadow-sm tracking-wide">HEDEF AVM</h1>
-        <p class="text-pink-500 font-bold text-xs sm:text-sm md:text-lg mt-1 tracking-widest">SÜRPRİZ HEDİYE OYUNU</p>
-    </header>
-
-    <!-- GİRİŞ / BAREM SEÇİM EKRANI -->
-    <div id="entry-screen" class="flex w-full max-w-6xl px-4 z-20 flex-col items-center justify-center min-h-screen pt-[12vh] pb-[8vh] no-select">
-        
-        <div class="text-center mb-[4vh] relative w-full flex flex-col items-center">
-            <h2 class="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-800 bg-white/80 backdrop-blur-sm px-6 py-2 rounded-full inline-block shadow-sm">
-                Alışveriş Tutarınızı Seçiniz
-            </h2>
-            <p class="text-gray-600 mt-2 text-xs sm:text-sm md:text-base font-medium bg-white/80 backdrop-blur-sm px-4 py-1 rounded-full inline-block shadow-sm">
-                Hediye havuzu seçiminize göre belirlenecektir.
-            </p>
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-[2vw] w-full mb-[5vh] max-w-md sm:max-w-none mx-auto">
-            <!-- 20.000 TL Seçeneği -->
-            <div onclick="selectTier('tier20k')" id="card-tier20k" class="tier-card bg-white/90 backdrop-blur-md rounded-2xl md:rounded-3xl p-4 border-4 border-transparent shadow-xl flex flex-col items-center justify-center text-center relative h-[25vh] sm:h-[35vh] md:h-[45vh] min-h-[160px] max-h-[320px] group">
-                <div class="check-icon opacity-0 absolute top-2 right-2 md:top-4 md:right-4 bg-pink-500 text-white rounded-full w-6 h-6 md:w-8 md:h-8 flex items-center justify-center transition-opacity shadow-md text-xs md:text-base">
-                    <i class="fas fa-check"></i>
-                </div>
-                <div class="w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20 bg-pink-100 rounded-full flex items-center justify-center mb-2 text-pink-500 text-xl md:text-3xl group-hover:scale-110 transition-transform shadow-inner">
-                    <i class="fas fa-bag-shopping"></i>
-                </div>
-                <h3 class="text-xl md:text-2xl lg:text-3xl font-bold text-gray-800 mb-1">20.000 TL</h3>
-                <p class="text-[10px] md:text-sm text-gray-500 font-semibold uppercase tracking-wider">ve Üzeri</p>
+    <!-- Top Navigation / Brand Header -->
+    <header class="w-full max-w-6xl mx-auto px-4 sm:px-6 pt-4 sm:pt-6 pb-2 z-30 relative flex flex-col sm:flex-row items-center sm:justify-between gap-2">
+        <!-- Mobile & Desktop Controls Bar -->
+        <div class="w-full sm:w-auto flex items-center justify-between sm:contents">
+            <!-- Back Button (visible on game screen) -->
+            <div class="sm:w-32 flex justify-start shrink-0 sm:order-1">
+                <button id="back-btn" onclick="returnToTiers()" class="hidden glass-panel hover:bg-white text-hedef-700 font-bold text-xs sm:text-sm px-3.5 py-2 rounded-full flex items-center gap-1.5 transition-all hover:-translate-x-0.5 active:scale-95 whitespace-nowrap">
+                    <i class="fas fa-arrow-left text-xs"></i>
+                    <span>Baremler</span>
+                </button>
             </div>
 
-            <!-- 60.000 TL Seçeneği -->
-            <div onclick="selectTier('tier60k')" id="card-tier60k" class="tier-card bg-white/90 backdrop-blur-md rounded-2xl md:rounded-3xl p-4 border-4 border-transparent shadow-xl flex flex-col items-center justify-center text-center relative h-[25vh] sm:h-[35vh] md:h-[45vh] min-h-[160px] max-h-[320px] group">
-                <div class="check-icon opacity-0 absolute top-2 right-2 md:top-4 md:right-4 bg-pink-500 text-white rounded-full w-6 h-6 md:w-8 md:h-8 flex items-center justify-center transition-opacity shadow-md text-xs md:text-base">
-                    <i class="fas fa-check"></i>
-                </div>
-                <div class="w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20 bg-purple-100 rounded-full flex items-center justify-center mb-2 text-purple-500 text-xl md:text-3xl group-hover:scale-110 transition-transform shadow-inner">
-                    <i class="fas fa-cart-shopping"></i>
-                </div>
-                <h3 class="text-xl md:text-2xl lg:text-3xl font-bold text-gray-800 mb-1">60.000 TL</h3>
-                <p class="text-[10px] md:text-sm text-gray-500 font-semibold uppercase tracking-wider">ve Üzeri</p>
-            </div>
-
-            <!-- 100.000 TL Seçeneği -->
-            <div onclick="selectTier('tier100k')" id="card-tier100k" class="tier-card bg-white/90 backdrop-blur-md rounded-2xl md:rounded-3xl p-4 border-4 border-transparent shadow-xl flex flex-col items-center justify-center text-center relative h-[25vh] sm:h-[35vh] md:h-[45vh] min-h-[160px] max-h-[320px] group">
-                <div class="check-icon opacity-0 absolute top-2 right-2 md:top-4 md:right-4 bg-pink-500 text-white rounded-full w-6 h-6 md:w-8 md:h-8 flex items-center justify-center transition-opacity shadow-md text-xs md:text-base">
-                    <i class="fas fa-check"></i>
-                </div>
-                <div class="w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20 bg-yellow-100 rounded-full flex items-center justify-center mb-2 text-yellow-600 text-xl md:text-3xl group-hover:scale-110 transition-transform shadow-inner">
-                    <i class="fas fa-crown"></i>
-                </div>
-                <h3 class="text-2xl md:text-3xl lg:text-4xl font-extrabold text-gray-800 mb-1">100.000 TL</h3>
-                <p class="text-[10px] md:text-sm text-gray-500 font-semibold uppercase tracking-wider">ve Üzeri</p>
-            </div>
-        </div>
-
-        <button onclick="startGame()" id="start-btn" class="bg-gray-300 text-white font-bold py-3 px-8 md:py-[2vh] md:px-[4vw] rounded-full text-lg md:text-2xl shadow-lg transition-all transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none" disabled>
-            OYUNA BAŞLA
-        </button>
-
-    </div>
-
-    <!-- ANA OYUN ALANI (Başlangıçta Gizli) -->
-    <main id="game-container" class="hidden flex-1 w-full max-w-7xl flex-col items-center justify-center min-h-screen px-2 sm:px-4 z-10 pt-[12vh] pb-[8vh] no-select">
-        
-        <div id="instruction-text" class="text-center mb-[4vh]">
-            <span class="inline-block bg-white/90 backdrop-blur-md px-6 py-2 md:px-8 md:py-3 rounded-full shadow-lg text-base md:text-2xl lg:text-3xl font-bold text-pink-600 border-2 border-pink-200">
-                Hedefix ile hediyeni kap!
-            </span>
-        </div>
-
-        <div id="game-area" class="grid grid-cols-3 gap-2 sm:gap-4 md:gap-[3vw] w-full items-end justify-items-center h-auto">
-            
-            <div class="gift-mascot group flex flex-col items-center w-full" onclick="startAnimation(1)">
-                <span class="mb-2 md:mb-[2vh] font-bold text-pink-600 bg-white px-2 py-1 sm:px-4 md:px-6 md:py-2 rounded-full shadow-lg border border-pink-100 text-[10px] sm:text-xs md:text-lg lg:text-xl group-hover:bg-pink-600 group-hover:text-white transition-colors z-20 whitespace-nowrap">
-                    1. Seçim
-                </span>
-                <div class="relative w-full h-[35vh] sm:h-[45vh] md:h-[55vh] min-h-[180px] max-h-[500px] flex items-end justify-center">
-                    <img src="https://i.ibb.co/d40mGZWM/freepik-a-cute-pink-female-mascot-with-big-sparkling-eyes-9768.jpg" alt="Maskot 1" class="h-full w-auto max-w-full object-contain filter drop-shadow-xl md:drop-shadow-2xl hover:brightness-105 transition-all duration-300 rounded-2xl pointer-events-none">
-                </div>
-            </div>
-
-            <div class="gift-mascot group flex flex-col items-center w-full" onclick="startAnimation(2)">
-                <span class="mb-2 md:mb-[2vh] font-bold text-pink-600 bg-white px-2 py-1 sm:px-4 md:px-6 md:py-2 rounded-full shadow-lg border border-pink-100 text-[10px] sm:text-xs md:text-lg lg:text-xl group-hover:bg-pink-600 group-hover:text-white transition-colors z-20 whitespace-nowrap">
-                    2. Seçim
-                </span>
-                <div class="relative w-full h-[35vh] sm:h-[45vh] md:h-[55vh] min-h-[180px] max-h-[500px] flex items-end justify-center">
-                    <img src="https://i.ibb.co/mr2QxJ3g/freepik-pink-female-mascot-with-large-glittering-eyes-pres-9764.jpg" alt="Maskot 2" class="h-full w-auto max-w-full object-contain filter drop-shadow-xl md:drop-shadow-2xl hover:brightness-105 transition-all duration-300 rounded-2xl pointer-events-none">
-                </div>
-            </div>
-
-            <div class="gift-mascot group flex flex-col items-center w-full" onclick="startAnimation(3)">
-                <span class="mb-2 md:mb-[2vh] font-bold text-pink-600 bg-white px-2 py-1 sm:px-4 md:px-6 md:py-2 rounded-full shadow-lg border border-pink-100 text-[10px] sm:text-xs md:text-lg lg:text-xl group-hover:bg-pink-600 group-hover:text-white transition-colors z-20 whitespace-nowrap">
-                    3. Seçim
-                </span>
-                <div class="relative w-full h-[35vh] sm:h-[45vh] md:h-[55vh] min-h-[180px] max-h-[500px] flex items-end justify-center">
-                    <img src="https://i.ibb.co/xq6jMBKT/freepik-pink-female-mascot-with-large-sparkling-eyes-in-wh-9771.jpg" alt="Maskot 3" class="h-full w-auto max-w-full object-contain filter drop-shadow-xl md:drop-shadow-2xl hover:brightness-105 transition-all duration-300 rounded-2xl pointer-events-none">
-                </div>
-            </div>
-
-        </div>
-
-    </main>
-
-    <!-- GIF Animasyon Ekranı -->
-    <div id="gif-overlay" class="fixed inset-0 z-40 flex items-center justify-center bg-black/85 backdrop-blur-sm hidden flex-col no-select p-4">
-        <img id="animation-gif" src="" alt="Hediye Hazırlanıyor..." class="w-full max-w-[250px] md:max-w-md h-auto object-contain drop-shadow-2xl rounded-2xl pointer-events-none">
-        <p class="text-white font-bold text-lg md:text-2xl mt-6 animate-pulse tracking-wide text-center">Hediye Hazırlanıyor...</p>
-    </div>
-
-    <!-- Sonuç Modalı -->
-    <div id="result-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-md hidden no-select px-4 overflow-y-auto">
-        <div class="modal-content bg-white rounded-[2rem] md:rounded-[2.5rem] p-6 md:p-8 max-w-md w-full text-center shadow-2xl relative border-[6px] md:border-8 border-pink-200 my-8">
-            <div class="absolute -top-12 md:-top-14 left-1/2 transform -translate-x-1/2 w-20 h-20 md:w-28 md:h-28 bg-gradient-to-br from-pink-400 to-pink-600 rounded-full flex items-center justify-center border-4 md:border-[6px] border-white shadow-xl animate-bounce">
-                <i class="fas fa-gift text-4xl md:text-6xl text-white"></i>
-            </div>
-
-            <h2 class="text-2xl md:text-4xl font-extrabold text-gray-800 mt-8 md:mt-12 mb-2 tracking-tight">TEBRİKLER!</h2>
-            <p class="text-pink-500 font-semibold mb-4 md:mb-6 text-sm md:text-lg">Şanslı seçiminden kazandığın ürün:</p>
-            
-            <div class="bg-gradient-to-r from-pink-50 to-rose-50 p-4 md:p-6 rounded-xl md:rounded-2xl border-2 border-pink-200 mb-6 md:mb-8 transform rotate-1 hover:rotate-0 transition-transform shadow-inner max-h-[30vh] overflow-y-auto custom-scrollbar">
-                <p id="won-prize-name" class="text-lg md:text-2xl font-black text-pink-600 uppercase break-words leading-tight">...</p>
-            </div>
-            
-            <div class="border-t-2 border-gray-100 pt-4 md:pt-6">
-                <p class="text-[11px] md:text-sm text-gray-500 mb-4 md:mb-5 font-medium bg-gray-50 p-2 rounded-lg">Lütfen bu ekranı görevliye gösteriniz.</p>
-                <button onclick="resetGame()" class="w-full bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-bold py-3 md:py-4 rounded-xl md:rounded-2xl transition-all shadow-lg shadow-pink-200/50 text-lg md:text-xl transform hover:scale-[1.02]">
-                    Yeni Oyun Başlat
+            <!-- Sound Control -->
+            <div class="sm:w-32 flex items-center justify-end gap-2 shrink-0 sm:order-3">
+                <button id="sound-toggle" onclick="toggleSound()" title="Ses Aç/Kapat" class="glass-panel hover:bg-white text-hedef-700 w-10 h-10 rounded-full flex items-center justify-center transition-all hover:scale-105 active:scale-95" aria-label="Sesi aç veya kapat">
+                    <i id="sound-icon" class="fas fa-volume-high text-base"></i>
                 </button>
             </div>
         </div>
+
+        <!-- Brand Lockup -->
+        <div class="text-center flex flex-col items-center mt-1 sm:mt-0 sm:order-2">
+            <h1 class="font-display text-[2.35rem] sm:text-4xl md:text-5xl font-black tracking-tight bg-gradient-to-r from-hedef-700 via-hedef-500 to-rose-500 bg-clip-text text-transparent drop-shadow-sm leading-none whitespace-nowrap">
+                HEDEF AVM
+            </h1>
+            <div class="mt-2 inline-flex items-center gap-1.5 bg-white/85 backdrop-blur-md border border-pink-200/80 px-4 py-1 rounded-full shadow-sm whitespace-nowrap">
+                <span class="w-2 h-2 rounded-full bg-hedef-500 animate-pulse shrink-0"></span>
+                <span class="text-xs font-extrabold tracking-[0.15em] sm:tracking-[0.18em] text-hedef-700 uppercase whitespace-nowrap">
+                    Hedefix Şanslı Kutu
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <!-- =========================================================
+         EKRAN 1: BAREM SEÇİMİ (35.000 / 75.000 / 125.000 TL)
+    ========================================================== -->
+    <section id="entry-screen" class="flex-1 w-full max-w-5xl mx-auto px-4 sm:px-6 py-3 sm:py-6 z-20 flex flex-col items-center justify-center screen-fade-in">
+
+        <!-- Hero Heading -->
+        <div class="text-center mb-5 sm:mb-8 max-w-xl">
+            <h2 class="font-display text-[1.75rem] sm:text-3xl md:text-4xl font-extrabold text-hedef-ink tracking-tight leading-tight">
+                Alışveriş Tutarınızı Seçin
+            </h2>
+            <p class="mt-2 text-sm sm:text-base font-medium text-hedef-ink/75">
+                Seçtiğiniz bareme özel sürpriz hediye havuzu ile Hedefix kutunuzu açın.
+            </p>
+        </div>
+
+        <!-- 3 Tier Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5 sm:gap-5 md:gap-6 w-full mb-6 sm:mb-9">
+
+            <!-- 35.000 TL -->
+            <button type="button" onclick="selectTier('tier35k')" id="card-tier35k" style="--stagger: 60ms;"
+                class="tier-card glass-panel rounded-2xl sm:rounded-3xl px-5 py-5 sm:px-6 sm:py-9 border-2 border-white/90 text-left sm:text-center flex flex-row sm:flex-col items-center gap-4 sm:gap-0 group focus:outline-none focus-visible:ring-4 focus-visible:ring-pink-300">
+                <div class="check-badge absolute top-3.5 right-3.5 sm:top-4 sm:right-4 w-7 h-7 rounded-full bg-hedef-600 text-white flex items-center justify-center shadow-md text-xs">
+                    <i class="fas fa-check"></i>
+                </div>
+                <div class="shrink-0 w-14 h-14 sm:w-18 sm:h-18 md:w-20 md:h-20 rounded-2xl sm:rounded-full bg-gradient-to-br from-pink-100 to-rose-200/80 text-hedef-600 flex items-center justify-center text-2xl sm:text-3xl shadow-inner sm:mb-5 group-hover:scale-110 transition-transform duration-300">
+                    <i class="fas fa-bag-shopping"></i>
+                </div>
+                <div class="flex-1 sm:flex-none">
+                    <div class="font-display text-3xl sm:text-4xl md:text-[2.6rem] font-black text-hedef-ink leading-none tracking-tight">
+                        35.000 TL
+                    </div>
+                    <div class="text-xs sm:text-sm md:text-base font-semibold text-hedef-ink/60 mt-1.5 sm:mt-2">
+                        ve Üzeri Alışverişler
+                    </div>
+                </div>
+            </button>
+
+            <!-- 75.000 TL -->
+            <button type="button" onclick="selectTier('tier75k')" id="card-tier75k" style="--stagger: 140ms;"
+                class="tier-card glass-panel rounded-2xl sm:rounded-3xl px-5 py-5 sm:px-6 sm:py-9 border-2 border-white/90 text-left sm:text-center flex flex-row sm:flex-col items-center gap-4 sm:gap-0 group focus:outline-none focus-visible:ring-4 focus-visible:ring-fuchsia-300">
+                <div class="check-badge absolute top-3.5 right-3.5 sm:top-4 sm:right-4 w-7 h-7 rounded-full bg-hedef-600 text-white flex items-center justify-center shadow-md text-xs">
+                    <i class="fas fa-check"></i>
+                </div>
+                <div class="shrink-0 w-14 h-14 sm:w-18 sm:h-18 md:w-20 md:h-20 rounded-2xl sm:rounded-full bg-gradient-to-br from-fuchsia-100 to-purple-200/80 text-fuchsia-600 flex items-center justify-center text-2xl sm:text-3xl shadow-inner sm:mb-5 group-hover:scale-110 transition-transform duration-300">
+                    <i class="fas fa-cart-shopping"></i>
+                </div>
+                <div class="flex-1 sm:flex-none">
+                    <div class="font-display text-3xl sm:text-4xl md:text-[2.6rem] font-black text-hedef-ink leading-none tracking-tight">
+                        75.000 TL
+                    </div>
+                    <div class="text-xs sm:text-sm md:text-base font-semibold text-hedef-ink/60 mt-1.5 sm:mt-2">
+                        ve Üzeri Alışverişler
+                    </div>
+                </div>
+            </button>
+
+            <!-- 125.000 TL -->
+            <button type="button" onclick="selectTier('tier125k')" id="card-tier125k" style="--stagger: 220ms;"
+                class="tier-card tier-vip glass-panel rounded-2xl sm:rounded-3xl px-5 py-5 sm:px-6 sm:py-9 border-2 border-amber-200/90 text-left sm:text-center flex flex-row sm:flex-col items-center gap-4 sm:gap-0 group focus:outline-none focus-visible:ring-4 focus-visible:ring-amber-300">
+                <div class="check-badge absolute top-3.5 right-3.5 sm:top-4 sm:right-4 w-7 h-7 rounded-full bg-amber-500 text-white flex items-center justify-center shadow-md text-xs">
+                    <i class="fas fa-check"></i>
+                </div>
+                <div class="shrink-0 w-14 h-14 sm:w-18 sm:h-18 md:w-20 md:h-20 rounded-2xl sm:rounded-full bg-gradient-to-br from-amber-100 via-yellow-100 to-amber-200/90 text-amber-600 flex items-center justify-center text-2xl sm:text-3xl shadow-inner sm:mb-5 group-hover:scale-110 transition-transform duration-300">
+                    <i class="fas fa-crown"></i>
+                </div>
+                <div class="flex-1 sm:flex-none">
+                    <div class="font-display text-3xl sm:text-4xl md:text-[2.6rem] font-black text-hedef-ink leading-none tracking-tight">
+                        125.000 TL
+                    </div>
+                    <div class="text-xs sm:text-sm md:text-base font-semibold text-hedef-ink/60 mt-1.5 sm:mt-2">
+                        ve Üzeri Alışverişler
+                    </div>
+                </div>
+            </button>
+
+        </div>
+
+        <!-- Action Row -->
+        <div class="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
+            <button type="button" onclick="startGame()" id="start-btn" disabled
+                class="cta-btn w-full sm:w-auto min-w-[240px] bg-gray-300/90 text-white font-display font-extrabold tracking-wide py-3.5 sm:py-4 px-9 rounded-full text-base sm:text-xl flex items-center justify-center gap-2.5 disabled:opacity-55 disabled:cursor-not-allowed">
+                <span>OYUNA BAŞLA</span>
+                <i class="fas fa-wand-magic-sparkles text-sm sm:text-base"></i>
+            </button>
+        </div>
+
+    </section>
+
+    <!-- =========================================================
+         EKRAN 2: HEDEFİX ŞANSLI KUTU SEÇİM SAHNESİ
+    ========================================================== -->
+    <main id="game-container" class="hidden flex-1 w-full max-w-6xl mx-auto px-3 sm:px-6 py-2 sm:py-4 z-20 flex-col items-center justify-center">
+
+        <!-- Active Tier Pill + Prompt -->
+        <div class="text-center mb-5 sm:mb-6 md:mb-8 flex flex-col items-center px-2">
+            <div id="active-tier-badge" class="inline-flex items-center gap-2 glass-panel px-4 py-1.5 rounded-full text-sm sm:text-base font-extrabold text-hedef-700 mb-3">
+                <i class="fas fa-tag text-hedef-500"></i>
+                <span id="active-tier-label">35.000 TL ve Üzeri</span>
+            </div>
+            <h2 class="font-display text-[1.7rem] sm:text-3xl md:text-4xl font-extrabold text-hedef-ink tracking-tight leading-tight">
+                Hedefix ile Şanslı Kutunu Seç!
+            </h2>
+            <p class="text-sm sm:text-base font-medium text-hedef-ink/75 mt-1.5">
+                Üç sürpriz kutudan birine dokun, hediyeni anında keşfet.
+            </p>
+        </div>
+
+        <!-- 3 Hedefix Mascot Boxes (Mobilde ferah yatay kartlar, Masaüstünde 3'lü sahne) -->
+        <div id="game-area" class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-5 md:gap-8 w-full max-w-md sm:max-w-5xl items-stretch sm:items-end justify-items-center pt-1 sm:pt-2 pb-4">
+
+            <!-- Kutu 1 (Pembe / Rose) -->
+            <button type="button" id="mascot-1" onclick="chooseBox(1)" style="--tilt: -2.5deg;"
+                class="mascot-slot group flex flex-row sm:flex-col items-center justify-between sm:justify-end w-full rounded-3xl sm:rounded-none px-4 py-3 sm:p-0 gap-3 sm:gap-0 border-l-4 sm:border-l-0 border-l-hedef-500 focus:outline-none">
+                <!-- Desktop Pill -->
+                <span class="hidden sm:inline-flex relative z-10 mb-3 items-center gap-1.5 bg-gradient-to-r from-hedef-500 to-rose-500 group-hover:from-hedef-600 group-hover:to-rose-600 text-white font-display font-extrabold text-sm md:text-base px-6 py-2 rounded-full transition-all duration-300 shadow-lg shadow-pink-400/40 group-hover:scale-105">
+                    <i class="fas fa-gift text-xs opacity-90"></i>
+                    <span>1. Kutu</span>
+                </span>
+                <!-- Character Stage -->
+                <div class="relative shrink-0 w-24 h-28 sm:w-full sm:h-[42vh] md:h-[48vh] sm:min-h-[260px] sm:max-h-[420px] flex items-center sm:items-end justify-center">
+                    <div class="mascot-aura aura-pink"></div>
+                    <div class="mascot-float h-full flex items-center sm:items-end justify-center relative z-10" style="--float-delay: 0s;">
+                        <img src="https://i.ibb.co/Xx6MFQMj/hedefix-box-1.png" alt="Hedefix 1. Sürpriz Kutu"
+                             class="mascot-img max-h-full w-auto max-w-full object-contain pointer-events-none select-none">
+                    </div>
+                </div>
+                <!-- Mobile Info & Tap CTA -->
+                <div class="flex sm:hidden flex-1 flex-col items-start text-left min-w-0">
+                    <span class="font-display text-2xl font-black text-hedef-600 leading-tight">1. Kutu</span>
+                    <span class="text-sm font-semibold text-hedef-ink/70 mt-0.5 leading-snug">Sürpriz hediyeni açmak için dokun</span>
+                </div>
+                <div class="flex sm:hidden shrink-0 w-11 h-11 rounded-full bg-gradient-to-br from-hedef-500 to-rose-600 text-white items-center justify-center shadow-md shadow-pink-300/70">
+                    <i class="fas fa-gift text-sm"></i>
+                </div>
+                <div class="hidden sm:block mascot-floor-shadow"></div>
+            </button>
+
+            <!-- Kutu 2 (Mor / Orkide) -->
+            <button type="button" id="mascot-2" onclick="chooseBox(2)" style="--tilt: 0deg;"
+                class="mascot-slot group flex flex-row sm:flex-col items-center justify-between sm:justify-end w-full rounded-3xl sm:rounded-none px-4 py-3 sm:p-0 gap-3 sm:gap-0 border-l-4 sm:border-l-0 border-l-purple-500 focus:outline-none">
+                <!-- Desktop Pill -->
+                <span class="hidden sm:inline-flex relative z-10 mb-3 items-center gap-1.5 bg-gradient-to-r from-fuchsia-600 to-purple-600 group-hover:from-fuchsia-700 group-hover:to-purple-700 text-white font-display font-extrabold text-sm md:text-base px-6 py-2 rounded-full transition-all duration-300 shadow-lg shadow-purple-400/40 group-hover:scale-105">
+                    <i class="fas fa-star text-xs opacity-90"></i>
+                    <span>2. Kutu</span>
+                </span>
+                <!-- Character Stage -->
+                <div class="relative shrink-0 w-24 h-28 sm:w-full sm:h-[42vh] md:h-[48vh] sm:min-h-[260px] sm:max-h-[420px] flex items-center sm:items-end justify-center">
+                    <div class="mascot-aura aura-violet"></div>
+                    <div class="mascot-float h-full flex items-center sm:items-end justify-center relative z-10" style="--float-delay: -1.3s;">
+                        <img src="https://i.ibb.co/j9L40wsN/hedefix-box-2.png" alt="Hedefix 2. Sürpriz Kutu"
+                             class="mascot-img max-h-full w-auto max-w-full object-contain pointer-events-none select-none">
+                    </div>
+                </div>
+                <!-- Mobile Info & Tap CTA -->
+                <div class="flex sm:hidden flex-1 flex-col items-start text-left min-w-0">
+                    <span class="font-display text-2xl font-black text-purple-700 leading-tight">2. Kutu</span>
+                    <span class="text-sm font-semibold text-hedef-ink/70 mt-0.5 leading-snug">Sürpriz hediyeni açmak için dokun</span>
+                </div>
+                <div class="flex sm:hidden shrink-0 w-11 h-11 rounded-full bg-gradient-to-br from-fuchsia-600 to-purple-600 text-white items-center justify-center shadow-md shadow-purple-300/70">
+                    <i class="fas fa-star text-sm"></i>
+                </div>
+                <div class="hidden sm:block mascot-floor-shadow"></div>
+            </button>
+
+            <!-- Kutu 3 (Altın / Amber) -->
+            <button type="button" id="mascot-3" onclick="chooseBox(3)" style="--tilt: 2.5deg;"
+                class="mascot-slot group flex flex-row sm:flex-col items-center justify-between sm:justify-end w-full rounded-3xl sm:rounded-none px-4 py-3 sm:p-0 gap-3 sm:gap-0 border-l-4 sm:border-l-0 border-l-amber-500 focus:outline-none">
+                <!-- Desktop Pill -->
+                <span class="hidden sm:inline-flex relative z-10 mb-3 items-center gap-1.5 bg-gradient-to-r from-amber-500 to-orange-500 group-hover:from-amber-600 group-hover:to-orange-600 text-white font-display font-extrabold text-sm md:text-base px-6 py-2 rounded-full transition-all duration-300 shadow-lg shadow-amber-400/45 group-hover:scale-105">
+                    <i class="fas fa-gem text-xs opacity-90"></i>
+                    <span>3. Kutu</span>
+                </span>
+                <!-- Character Stage -->
+                <div class="relative shrink-0 w-24 h-28 sm:w-full sm:h-[42vh] md:h-[48vh] sm:min-h-[260px] sm:max-h-[420px] flex items-center sm:items-end justify-center">
+                    <div class="mascot-aura aura-gold"></div>
+                    <div class="mascot-float h-full flex items-center sm:items-end justify-center relative z-10" style="--float-delay: -2.6s;">
+                        <img src="https://i.ibb.co/xSyFHwsq/hedefix-box-3.png" alt="Hedefix 3. Sürpriz Kutu"
+                             class="mascot-img max-h-full w-auto max-w-full object-contain pointer-events-none select-none">
+                    </div>
+                </div>
+                <!-- Mobile Info & Tap CTA -->
+                <div class="flex sm:hidden flex-1 flex-col items-start text-left min-w-0">
+                    <span class="font-display text-2xl font-black text-amber-600 leading-tight">3. Kutu</span>
+                    <span class="text-sm font-semibold text-hedef-ink/70 mt-0.5 leading-snug">Sürpriz hediyeni açmak için dokun</span>
+                </div>
+                <div class="flex sm:hidden shrink-0 w-11 h-11 rounded-full bg-gradient-to-br from-amber-500 to-orange-500 text-white items-center justify-center shadow-md shadow-amber-300/70">
+                    <i class="fas fa-gem text-sm"></i>
+                </div>
+                <div class="hidden sm:block mascot-floor-shadow"></div>
+            </button>
+
+        </div>
+    </main>
+
+    <!-- =========================================================
+         AÇILIŞ HEYECANI OVERLAY (CSS 3D Shake + Sunburst)
+    ========================================================== -->
+    <div id="opening-overlay" class="fixed inset-0 z-40 hidden flex-col items-center justify-center bg-hedef-ink/75 backdrop-blur-md p-6">
+        <div class="relative flex items-center justify-center mb-5">
+            <div class="sunburst-rays"></div>
+            <img id="opening-mascot-img" src="https://i.ibb.co/Xx6MFQMj/hedefix-box-1.png" alt="Kutu Açılıyor"
+                 class="suspense-shake relative z-10 w-44 sm:w-56 md:w-64 h-auto object-contain drop-shadow-[0_24px_36px_rgba(242,46,132,0.55)] pointer-events-none">
+        </div>
+
+        <p id="opening-status-text" class="font-display text-xl sm:text-3xl font-extrabold text-white tracking-wide text-center drop-shadow-md">
+            Hedefix kutuyu sallıyor...
+        </p>
+
+        <!-- Smooth Progress Bar -->
+        <div class="w-56 sm:w-72 h-2 bg-white/20 rounded-full overflow-hidden mt-4 border border-white/20">
+            <div id="opening-progress" class="h-full w-0 bg-gradient-to-r from-pink-400 via-amber-300 to-rose-400 rounded-full transition-all duration-[2500ms] ease-out"></div>
+        </div>
     </div>
 
-    <footer class="w-full text-center py-[2vh] text-[10px] sm:text-xs font-semibold text-pink-400/80 absolute bottom-0 left-0 bg-white/30 backdrop-blur-sm z-10 pointer-events-none">
-        &copy; 2025 Hedef AVM
+    <!-- =========================================================
+         KAZANMA MODALI (Hedefix Kutlama + Ürün Kartı)
+    ========================================================== -->
+    <div id="result-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-hedef-ink/70 backdrop-blur-md p-3 sm:p-5 overflow-y-auto">
+        <div class="modal-card-enter bg-white/95 backdrop-blur-xl rounded-[2rem] px-5 py-5 sm:px-8 sm:py-6 max-w-lg sm:max-w-xl w-full text-center shadow-[0_32px_70px_-15px_rgba(43,16,32,0.45)] relative border-2 border-pink-200 my-auto">
+
+            <!-- Celebrating Hedefix (Kırpılmaması için kart içi güvenli yerleşim) -->
+            <div class="relative -mt-2 sm:-mt-3 mb-1.5 flex justify-center">
+                <div class="absolute inset-0 m-auto w-28 h-28 rounded-full bg-gradient-to-tr from-pink-300/45 via-amber-200/45 to-rose-200/30 blur-2xl pointer-events-none"></div>
+                <img src="https://i.ibb.co/1wsjZd1/hedefix-win.png" alt="Hedefix Tebrik Ediyor"
+                     class="win-mascot-bounce relative z-10 w-28 sm:w-32 h-auto object-contain pointer-events-none">
+            </div>
+
+            <span id="won-tier-tag" class="inline-flex items-center gap-1.5 text-xs sm:text-sm font-extrabold uppercase tracking-widest text-hedef-600 bg-hedef-50 border border-pink-200 px-4 py-1 rounded-full">
+                35.000 TL ve Üzeri
+            </span>
+
+            <h2 class="font-display text-3xl sm:text-4xl font-black text-hedef-ink mt-2 tracking-tight leading-none">
+                TEBRİKLER!
+            </h2>
+            <p class="text-sm sm:text-base font-semibold text-hedef-ink/75 mt-1 mb-3">
+                Hedefix şanslı kutundan kazandığın hediye:
+            </p>
+
+            <!-- Prize Ticket -->
+            <div class="prize-ticket rounded-2xl border-2 border-pink-200/90 px-4 py-4 sm:px-6 sm:py-5 mb-3.5 shadow-inner">
+                <div class="flex items-center justify-center gap-2 text-amber-500 text-sm mb-1.5">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star text-base"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+                <p id="won-prize-name" class="font-display text-[1.65rem] sm:text-3xl md:text-[2rem] font-black text-hedef-700 uppercase leading-tight tracking-tight break-words">
+                    ...
+                </p>
+                <div id="won-prize-meta" class="mt-3 flex flex-wrap items-center justify-center gap-2 text-xs sm:text-sm font-bold text-hedef-ink/70">
+                    <span id="won-prize-code" class="hidden bg-white/95 border border-pink-100 px-3 py-1 rounded-lg"></span>
+                    <span id="won-time-stamp" class="bg-white/95 border border-pink-100 px-3 py-1 rounded-lg"></span>
+                </div>
+            </div>
+
+            <div class="flex items-center justify-center gap-2.5 text-sm sm:text-base font-semibold text-hedef-ink/80 bg-hedef-50/90 border border-pink-100 rounded-xl py-2.5 px-4 mb-4 leading-snug">
+                <i class="fas fa-store text-hedef-500 text-base shrink-0"></i>
+                <span>Hediyenizi teslim almak için bu ekranı görevliye gösteriniz.</span>
+            </div>
+
+            <button type="button" onclick="resetGame()"
+                class="cta-btn w-full text-white font-display font-extrabold py-3.5 rounded-2xl text-lg sm:text-xl flex items-center justify-center gap-2">
+                <i class="fas fa-rotate-right text-base"></i>
+                <span>Yeni Oyun Başlat</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="w-full text-center py-3 px-4 text-[11px] font-semibold text-hedef-ink/50 z-20">
+        &copy; 2026 Hedef AVM &bull; Hedefix Şanslı Kutu Kampanyası
     </footer>
 
     <script>
-        const clickSound = new Audio('https://cdn.pixabay.com/audio/2022/03/15/audio_c8c8a73467.mp3'); 
-        const waitSound = new Audio('https://cdn.pixabay.com/audio/2022/03/10/audio_c635d968b5.mp3'); 
-        const winSound = new Audio('https://cdn.pixabay.com/audio/2021/08/04/audio_0625c153e2.mp3'); 
-        
-        clickSound.volume = 0.5;
-        waitSound.volume = 0.6;
-        winSound.volume = 0.7;
+        // ============================================================
+        // 1. BAREM VE HEDİYE HAVUZLARI (Kutu Aksiyonu Excel Güncel)
+        // ============================================================
+        const TIER_META = {
+            tier35k: {
+                label: "35.000 TL ve Üzeri",
+                shortLabel: "35.000 TL Barem",
+                badgeText: "Sürpriz Hediye"
+            },
+            tier75k: {
+                label: "75.000 TL ve Üzeri",
+                shortLabel: "75.000 TL Barem",
+                badgeText: "Özel Hediye"
+            },
+            tier125k: {
+                label: "125.000 TL ve Üzeri",
+                shortLabel: "125.000 TL VIP Barem",
+                badgeText: "VIP Hediye"
+            }
+        };
 
-        const GIF_URL = "https://i.ibb.co/8Dc7zSRf/ezgif-3f98e6a685125b54.gif";
-        const GIF_DURATION = 3500;
-
-        // --- BAREMLERE GÖRE HEDİYE HAVUZLARI ---
-        const prizePools = {
-            tier20k: [
-                { ad: "XİAOMİ Mİ SMART SCALE 2 FONK.CAM TARTI", sans: 1 },
-                { ad: "RAİN KAMPANYALI 80*150 HALI", sans: 1 },
-                { ad: "LATEKS KAMPANYALI 80*150 HALI", sans: 1 },
-                { ad: "LATEKS KAMPANYALI 120*180 HALI", sans: 1 },
-                { ad: "LATEKS KAMPANYALI 160*230 HALI", sans: 1 },
-                { ad: "İRİNA EKOSE PAMUKLU Ç.K BATTANİYE", sans: 1 },
-                { ad: "AKSU VİZON Ç.K BATTANİYE", sans: 1 },
-                { ad: "İRİNA FLOWER PAMUKLU Ç.K BATTANİYE", sans: 1 },
-                { ad: "ECOBOX DOKUMA SKOC SAÇAKLI Ç.K BATTANİYE 180*220", sans: 1 },
-                { ad: "ECOBOX DOKUMA SKOC SAÇAKLI T.K BATTANİYE 150*200", sans: 1 },
-                { ad: "İRİNA DESENLİ T.K FİTTED ÇARŞAF SETİ", sans: 1 },
-                { ad: "VİVEN JAKAR SATEN T.K FİTTED ÇARŞAF SETİ", sans: 1 },
-                { ad: "UVI LASTİKLİ ÇARŞAF YASTIKLI (180X200)", sans: 1 },
-                { ad: "UVI LASTİKLİ ÇARŞAF YASTIKLI (160X200)", sans: 1 },
-                { ad: "UVI LASTİKLİ ÇARŞAF YASTIKLI (100X200)", sans: 1 },
-                { ad: "UVI LASTİKLİ ÇARŞAF YASTIKLI (120X200)", sans: 1 },
-                { ad: "İRİNA Ç.K NEVRESİM TKM", sans: 1 },
-                { ad: "İRİNA T.K NEVRESİM TKM", sans: 1 },
-                { ad: "HALİME SULTAN 2Lİ KAMPANYALI PASPAS TAKIMI", sans: 1 },
-                { ad: "MR SLEEP KIRPIK VİSCO YASTIK 50*70", sans: 1 },
-                { ad: "HALİME SULTAN KAMPANYALI 200*225 ÇOK AMAÇLI YATAK ÖRTÜSÜ", sans: 1 },
-                { ad: "FIRST CLASS FC-850 BALIK TAVASI", sans: 1 },
-                { ad: "FIRST CLASS FC-218 KREP TAVASI 26 CM", sans: 1 },
-                { ad: "ACAR BETTY 2 Lİ STANDLI MİNİ PASTA SETİ KAI-07647/18", sans: 1 },
-                { ad: "ACAR JOYCE 2 STANDLI MİNİ PASTA SETİ KAI-07648/18", sans: 1 },
-                { ad: "ACAR ROSS/ALORA KUPA KAI-06395/36", sans: 1 },
-                { ad: "ACAR CHERRA CASSY PORSELEN KUPA KAI-06833/36", sans: 1 },
-                { ad: "ACAR TANSY KAPAKLI KUPA KAI-07651/36", sans: 1 },
-                { ad: "ACAR PETRA KUPA KAI-06393/36", sans: 1 },
-                { ad: "ACAR MY MUG KUPA KAI-21-0177/36", sans: 1 }
+        const PRIZE_POOLS = {
+            tier35k: [
+                { kod: "LHS-5383-10", ad: "LEXICAL LHS-5383-10 SAÇ DÜZLEŞTİRİCİ SARI", sans: 1 },
+                { kod: "LHS-5383-11", ad: "LEXICAL LHS-5383-11 SAÇ DÜZLEŞTİRİCİ PEMBE", sans: 1 },
+                { kod: "LHS-5383-7", ad: "LEXICAL LHS-5383-7 SAÇ DÜZLEŞTİRİCİ YEŞİL", sans: 1 },
+                { kod: "LHS-5386-4", ad: "LEXICAL LHS-5386-4 SAÇ DÜZLEŞTİRİCİ 65W KIRMIZI", sans: 1 },
+                { kod: "LHS-5386-8", ad: "LEXICAL LHS-5386-8 SAÇ DÜZLEŞTİRİCİ 65W SILVER", sans: 1 },
+                { kod: "LHS-5390", ad: "LEXICAL LHS-5390 SAÇ DÜZLEŞTİRİCİ KALIN PLAKA", sans: 1 },
+                { kod: "4130901718325", ad: "HALL DREAM 100*200 HALI-SK", sans: 1 },
+                { kod: "4130901718356", ad: "HALL DREAM 80*300 HALI-SK", sans: 1 },
+                { kod: "4130901718455", ad: "HALL DREAM 80*150 HALI-SK", sans: 1 },
+                { kod: "4130901718523", ad: "HALL DREAM 120*180 HALI-SK", sans: 1 },
+                { kod: "4130901853743", ad: "İNCİ KAMPANYALI 160*230 KEÇE TABAN HALI-SK", sans: 1 },
+                { kod: "4130902155891", ad: "SARAR SAFİR SİSAL 100*200 HALI-SK", sans: 1 },
+                { kod: "4130901914321", ad: "LATEKS KAMPANYALI 120*180 HALI", sans: 1 },
+                { kod: "4130901914345", ad: "LATEKS KAMPANYALI 160*230 HALI", sans: 1 },
+                { kod: "4130901558204", ad: "HALİME SULTAN PETEK ULTRA Ç.K YORGAN 195*215", sans: 1 },
+                { kod: "4130901589253", ad: "HALİME SULTAN SHERPA Ç.K YORGAN SETİ 195*215", sans: 1 },
+                { kod: "8699131753392", ad: "SCHAFER CORY Y.Y.TAVA - 26CM -GRİ", sans: 1 },
+                { kod: "8682450991200", ad: "FIRST CLASS FC-119 5 PRÇ ÇELİK KEPÇE SETİ", sans: 1 },
+                { kod: "", ad: "1.000 TL HEDİYE ÇEKİ", sans: 1 },
+                { kod: "8683561120015", ad: "FIRST CLASS FC-600 34CM BALIK TAVASI", sans: 1 },
+                { kod: "4130901913997", ad: "HALİME SULTAN KAMPANYALI 200*225 ÇOK AMAÇLI YATAK ÖRTÜSÜ", sans: 1 }
             ],
-            tier60k: [
-                { ad: "SCHAFER CHEF BLEND ÇUBUK BLENDER/ANTRASİT-SİYAH", sans: 1 },
-                { ad: "SCHAFER CHEF BLEND ÇUBUK BLENDER/KREM-SİYAH", sans: 1 },
-                { ad: "SCHAFER CHEF BLEND ÇUBUK BLENDER/SİYAH-ROSEGOLD", sans: 1 },
-                { ad: "SCHAFER KEYF-İ KAHVE ÇİFT TUŞLU TÜRK KAHVE MAK.", sans: 1 },
-                { ad: "HİKİNG WH9 SMARTWATCH AKILLI SAAT", sans: 1 },
-                { ad: "HALİME SULTAN PETEK ULTRA Ç.K YORGAN 195*215", sans: 1 },
-                { ad: "HALİME SULTAN SHERPA Ç.K YORGAN SETİ 195*215", sans: 1 },
-                { ad: "HALİME SULTAN FİTİLLİ Ç.K YORGAN SETİ 195*215", sans: 1 },
-                { ad: "VİVEN Ç.K NEVRESİM TKM", sans: 1 },
-                { ad: "HOMELAND NAKIŞLI Ç.K YATAK ÖRTÜSÜ", sans: 1 },
-                { ad: "POLO LIFE T.K YORGAN+YASTIK SETİ", sans: 1 },
-                { ad: "POLO LIFE Ç.K YORGAN+YASTIK SETİ", sans: 1 },
-                { ad: "ACAR ORION YAĞLIK&SİRKELİK BAHARAT TAKIMI  ALG-07830/12", sans: 1 },
-                { ad: "ACAR MABEL YAĞLIK&SİRKELİK BAHARAT TAKIMI  ALG-07826/12", sans: 1 },
-                { ad: "ACAR AVELINE AİLE BOY ÇAYDANLIK TKM.AR-08586/6", sans: 1 },
-                { ad: "ACAR ADONIS 6 LI KAHVE FİNCANI KAI-08175/8", sans: 1 },
-                { ad: "AISHA POME/LEMON/CHERRY 6 LI KAHVE FİNCAN TKM.NG-09502/12", sans: 1 },
-                { ad: "PROFİLO TKP1002 KAHVE MAK.KIRMIZI", sans: 10 },
-                { ad: "PROFİLO TKP1001 KAHVE MAK.GÜMÜŞ", sans: 10 },
-                { ad: "KOZA 120*180 HALI", sans: 10 }
+            tier75k: [
+                { kod: "4242006325190", ad: "PROFİLO TKP1003 KAHVE MAK.PEMBE", sans: 1 },
+                { kod: "8682511906440", ad: "FAKİR KAAVE MONO TÜRK KAHVE MAK.GRİ", sans: 1 },
+                { kod: "8682511906457", ad: "FAKİR KAAVE MONO TÜRK KAHVE MAK.KUMBEJİ", sans: 1 },
+                { kod: "8692341320415", ad: "ARNİCA IH32041 KÖPÜKLÜ PRO KAHVE MAK.SILVER", sans: 1 },
+                { kod: "LHD-5035-8", ad: "LEXICAL LHD-5035-8 SAÇ KURUTMA MAK.1800W GRİ", sans: 1 },
+                { kod: "LHD-5035-9", ad: "LEXICAL LHD-5035-9 SAÇ KURUTMA MAK.1800W GOLD", sans: 1 },
+                { kod: "4130902141726", ad: "TUĞRA KAYRA 160*230 HALI", sans: 1 },
+                { kod: "8699131803479", ad: "SCHAFER TOLEDO ÇELİK ÇAYDANLIK TKM (BÜYÜK BOY) 4 PARÇA-INOX", sans: 1 },
+                { kod: "", ad: "2.500 TL HEDİYE ÇEKİ", sans: 1 },
+                { kod: "8681145094431", ad: "ACAR AURORA PORSELEN 6 LI FİNCAN SET KOH-05012/8", sans: 1 },
+                { kod: "8681145110988", ad: "ACAR PRESCOT 6 LI KAHVE FİNCAN TAKIMI KAI-06398/12", sans: 1 },
+                { kod: "8681145134328", ad: "ACAR ADONIS 6 LI KAHVE FİNCANI KAI-08175/8", sans: 1 },
+                { kod: "8681145138333", ad: "ACAR BLACK/NAVY 6 LI KAHVE FİNCAN TAKIMI HXF-08432/8", sans: 1 }
             ],
-            tier100k: [
-                { ad: "ARNİCA ET11200 SÜPÜRGEÇ E-MAX ROSE ŞARJLI DİK SÜPÜRGE", sans: 1 },
-                { ad: "SCHAFER NEW SAVOR Y.Y.TENCERE SETİ 7 PRÇ.-SİYAH", sans: 10 },
-                { ad: "PROFİLO SÜPÜRGE", sans: 1 },
-                { ad: "KOZA 160*230 HALI", sans: 10 }
+            tier125k: [
+                { kod: "LHB-1605", ad: "LEXICAL LHB-1605 4 İN 1-800W BLENDER SETİ", sans: 1 },
+                { kod: "LHS-5395-4", ad: "LEXICAL LHS-5395-4 SAÇ ŞEKİL.SETİ KURUTMA&DÜZLEŞTİRİCİ 1300W RED", sans: 1 },
+                { kod: "LHS-5395-6", ad: "LEXICAL LHS-5395-6 SAÇ ŞEKİL.SETİ KURUTMA&DÜZLEŞTİRİCİ 1300W BLUE", sans: 1 },
+                { kod: "4130901575768", ad: "PROFİLO PSP5UHIJ TOZ TORBASIZ SÜPÜRGE", sans: 1 },
+                { kod: "4130901802697", ad: "PROFİLO PSP5U200 TOZ TORBASIZ SÜPÜRGE", sans: 1 },
+                { kod: "8699131103159", ad: "SCHAFER GRILL CHEF TOST MAKİNESİ - ROSEGOLD", sans: 1 },
+                { kod: "8699131761991", ad: "SCHAFER CONTEMPO TOST MAKİNESİ", sans: 1 },
+                { kod: "8699131837160", ad: "SCHAFER TOSTÇUMM TOST MAKİNESİ-ROSEGOLD", sans: 1 },
+                { kod: "LSM-2585", ad: "LEXICAL LSM-2585 DİJİTAL EKRAN TOST MAK.2000W", sans: 1 },
+                { kod: "4130902190649", ad: "POLO LIFE LOREN Ç.K YATAK ÖRTÜSÜ KREM", sans: 1 },
+                { kod: "", ad: "4.000 TL HEDİYE ÇEKİ", sans: 1 }
             ]
         };
 
+        const MASCOT_IMAGES = {
+            1: "https://i.ibb.co/Xx6MFQMj/hedefix-box-1.png",
+            2: "https://i.ibb.co/j9L40wsN/hedefix-box-2.png",
+            3: "https://i.ibb.co/xSyFHwsq/hedefix-box-3.png"
+        };
+
+        // ============================================================
+        // 2. WEB AUDIO API SES MOTORU (Harici dosya kopmasına karşı garantili)
+        // ============================================================
+        let soundEnabled = true;
+        let audioCtx = null;
+
+        function ensureAudio() {
+            if (!audioCtx) {
+                const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+                if (AudioContextClass) audioCtx = new AudioContextClass();
+            }
+            if (audioCtx && audioCtx.state === 'suspended') {
+                audioCtx.resume().catch(() => {});
+            }
+            return audioCtx;
+        }
+
+        function playTone(freq, duration, type = 'sine', gainVal = 0.14, delay = 0) {
+            if (!soundEnabled) return;
+            const ctx = ensureAudio();
+            if (!ctx) return;
+            const now = ctx.currentTime + delay;
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = type;
+            osc.frequency.setValueAtTime(freq, now);
+            gain.gain.setValueAtTime(0.001, now);
+            gain.gain.exponentialRampToValueAtTime(gainVal, now + 0.02);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start(now);
+            osc.stop(now + duration + 0.02);
+        }
+
+        function playClickSfx() {
+            playTone(580, 0.09, 'triangle', 0.12, 0);
+            playTone(880, 0.12, 'sine', 0.10, 0.045);
+        }
+
+        function playSuspenseSfx() {
+            const notes = [392, 440, 494, 523, 587, 659, 740, 784, 880];
+            notes.forEach((n, i) => {
+                playTone(n, 0.16, 'triangle', 0.09 + i * 0.006, i * 0.24);
+            });
+        }
+
+        function playWinSfx() {
+            const fanfare = [
+                { f: 523.25, d: 0.18, t: 0.00 },
+                { f: 659.25, d: 0.18, t: 0.11 },
+                { f: 783.99, d: 0.18, t: 0.22 },
+                { f: 1046.5, d: 0.55, t: 0.34 },
+                { f: 783.99, d: 0.45, t: 0.34 },
+                { f: 1318.5, d: 0.50, t: 0.48 }
+            ];
+            fanfare.forEach(n => playTone(n.f, n.d, 'triangle', 0.13, n.t));
+        }
+
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            const icon = document.getElementById('sound-icon');
+            icon.className = soundEnabled ? 'fas fa-volume-high text-sm sm:text-base' : 'fas fa-volume-xmark text-sm sm:text-base opacity-50';
+            if (soundEnabled) playClickSfx();
+        }
+
+        // ============================================================
+        // 3. OYUN DURUMU VE AKIŞ
+        // ============================================================
+        let selectedTierId = null;
         let currentPool = [];
         let isProcessing = false;
-        let selectedTierId = null;
+        let suspenseTimers = [];
 
-        // --- BAREM SEÇİMİ ---
         function selectTier(tierId) {
-            document.querySelectorAll('.tier-card').forEach(card => card.classList.remove('selected'));
-            
-            const selectedCard = document.getElementById('card-' + tierId);
-            selectedCard.classList.add('selected');
-            
             selectedTierId = tierId;
+            document.querySelectorAll('.tier-card').forEach(card => card.classList.remove('selected'));
+            const card = document.getElementById('card-' + tierId);
+            if (card) card.classList.add('selected');
+
             const startBtn = document.getElementById('start-btn');
             startBtn.disabled = false;
-            startBtn.classList.remove('bg-gray-300', 'cursor-not-allowed');
-            startBtn.classList.add('bg-pink-600', 'hover:bg-pink-700', 'text-white');
-            
-            clickSound.currentTime = 0;
-            clickSound.play().catch(e => console.warn(e));
+            playClickSfx();
         }
 
         function startGame() {
             if (!selectedTierId) return;
+            currentPool = PRIZE_POOLS[selectedTierId] || [];
 
-            currentPool = prizePools[selectedTierId];
-
+            document.getElementById('active-tier-label').textContent = TIER_META[selectedTierId].label;
             document.getElementById('entry-screen').classList.add('hidden');
             document.getElementById('entry-screen').classList.remove('flex');
-            
-            document.getElementById('game-container').classList.remove('hidden');
-            document.getElementById('game-container').classList.add('flex');
 
-            clickSound.currentTime = 0;
-            clickSound.play().catch(e => console.warn(e));
+            const gameContainer = document.getElementById('game-container');
+            gameContainer.classList.remove('hidden');
+            gameContainer.classList.add('flex', 'screen-fade-in');
+
+            document.getElementById('back-btn').classList.remove('hidden');
+
+            document.querySelectorAll('.mascot-slot').forEach(el => el.classList.remove('dimmed'));
+            playClickSfx();
         }
 
-        // --- OYUN MANTIĞI ---
-        function getRandomPrize() {
-            let totalWeight = 0;
-            currentPool.forEach(prize => totalWeight += prize.sans);
-
-            let random = Math.floor(Math.random() * totalWeight);
-            
-            for (let i = 0; i < currentPool.length; i++) {
-                random -= currentPool[i].sans;
-                if (random < 0) {
-                    return currentPool[i].ad;
-                }
-            }
-            return currentPool[currentPool.length - 1].ad;
-        }
-
-        function startAnimation(boxNumber) {
+        function returnToTiers() {
             if (isProcessing) return;
+            document.getElementById('game-container').classList.add('hidden');
+            document.getElementById('game-container').classList.remove('flex', 'screen-fade-in');
+            document.getElementById('back-btn').classList.add('hidden');
+
+            const entry = document.getElementById('entry-screen');
+            entry.classList.remove('hidden');
+            entry.classList.add('flex');
+            playClickSfx();
+        }
+
+        function pickWeightedPrize(pool) {
+            const totalWeight = pool.reduce((sum, item) => sum + (item.sans || 1), 0);
+            let roll = Math.random() * totalWeight;
+            for (const item of pool) {
+                roll -= (item.sans || 1);
+                if (roll < 0) return item;
+            }
+            return pool[pool.length - 1];
+        }
+
+        function chooseBox(boxNumber) {
+            if (isProcessing || !currentPool.length) return;
             isProcessing = true;
+            playClickSfx();
 
-            clickSound.currentTime = 0;
-            clickSound.play().catch(e => console.warn("Ses hatası:", e));
+            // Dim unselected boxes
+            [1, 2, 3].forEach(num => {
+                if (num !== boxNumber) {
+                    document.getElementById('mascot-' + num).classList.add('dimmed');
+                }
+            });
 
-            waitSound.currentTime = 0;
-            waitSound.loop = true;
-            waitSound.play().catch(e => console.warn("Ses hatası:", e));
+            const overlay = document.getElementById('opening-overlay');
+            const img = document.getElementById('opening-mascot-img');
+            const statusText = document.getElementById('opening-status-text');
+            const progress = document.getElementById('opening-progress');
 
-            const gifOverlay = document.getElementById('gif-overlay');
-            const gifImage = document.getElementById('animation-gif');
-            
-            gifImage.src = ""; 
-            gifImage.src = GIF_URL;
-            
-            gifOverlay.classList.remove('hidden');
+            img.src = MASCOT_IMAGES[boxNumber] || MASCOT_IMAGES[1];
+            statusText.textContent = "Hedefix kutuyu sallıyor...";
+            progress.style.transition = 'none';
+            progress.style.width = '0%';
 
-            setTimeout(() => {
-                const prize = getRandomPrize();
-                gifOverlay.classList.add('hidden');
+            overlay.classList.remove('hidden');
+            overlay.classList.add('flex');
+
+            // Trigger progress animation on next frame
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    progress.style.transition = 'width 2500ms cubic-bezier(0.22, 1, 0.36, 1)';
+                    progress.style.width = '100%';
+                });
+            });
+
+            playSuspenseSfx();
+
+            clearSuspenseTimers();
+            suspenseTimers.push(setTimeout(() => {
+                statusText.textContent = "Kurdele çözülüyor...";
+            }, 950));
+
+            suspenseTimers.push(setTimeout(() => {
+                statusText.textContent = "Sürpriz hediyen hazır!";
+            }, 1850));
+
+            suspenseTimers.push(setTimeout(() => {
+                const prize = pickWeightedPrize(currentPool);
+                overlay.classList.add('hidden');
+                overlay.classList.remove('flex');
                 showResult(prize);
                 startConfetti();
-                waitSound.pause();
-            }, GIF_DURATION);
+            }, 2600));
         }
 
-        function showResult(prizeName) {
-            winSound.currentTime = 0;
-            winSound.play().catch(e => console.warn("Ses hatası:", e));
+        function clearSuspenseTimers() {
+            suspenseTimers.forEach(t => clearTimeout(t));
+            suspenseTimers = [];
+        }
 
-            document.getElementById('won-prize-name').innerText = prizeName;
-            document.getElementById('result-modal').classList.remove('hidden');
+        function showResult(prize) {
+            playWinSfx();
+
+            document.getElementById('won-tier-tag').textContent = TIER_META[selectedTierId].label;
+            document.getElementById('won-prize-name').textContent = prize.ad;
+
+            const codeEl = document.getElementById('won-prize-code');
+            if (prize.kod) {
+                codeEl.textContent = 'Kod: ' + prize.kod;
+                codeEl.classList.remove('hidden');
+            } else {
+                codeEl.classList.add('hidden');
+            }
+
+            const now = new Date();
+            const hh = String(now.getHours()).padStart(2, '0');
+            const mm = String(now.getMinutes()).padStart(2, '0');
+            const ss = String(now.getSeconds()).padStart(2, '0');
+            document.getElementById('won-time-stamp').textContent = `Saat: ${hh}:${mm}:${ss}`;
+
+            const modal = document.getElementById('result-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
         }
 
         function resetGame() {
-            waitSound.pause();
-            waitSound.currentTime = 0;
-            
-            document.getElementById('result-modal').classList.add('hidden');
+            clearSuspenseTimers();
             stopConfetti();
-            
+
+            const modal = document.getElementById('result-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+
             document.getElementById('game-container').classList.add('hidden');
-            document.getElementById('game-container').classList.remove('flex');
-            
-            // Barem (tutar) seçim ekranına geri dön
-            document.getElementById('entry-screen').classList.remove('hidden');
-            document.getElementById('entry-screen').classList.add('flex');
-            
-            // Seçimleri sıfırla
-            selectedTierId = null;
+            document.getElementById('game-container').classList.remove('flex', 'screen-fade-in');
+            document.getElementById('back-btn').classList.add('hidden');
+
+            document.querySelectorAll('.mascot-slot').forEach(el => el.classList.remove('dimmed'));
             document.querySelectorAll('.tier-card').forEach(card => card.classList.remove('selected'));
+
+            selectedTierId = null;
+            currentPool = [];
+            isProcessing = false;
+
             const startBtn = document.getElementById('start-btn');
             startBtn.disabled = true;
-            startBtn.classList.add('bg-gray-300', 'cursor-not-allowed');
-            startBtn.classList.remove('bg-pink-600', 'hover:bg-pink-700', 'text-white');
 
-            isProcessing = false;
+            const entry = document.getElementById('entry-screen');
+            entry.classList.remove('hidden');
+            entry.classList.add('flex');
+            playClickSfx();
         }
 
-        // --- KONFETİ EFEKTİ ---
+        // ============================================================
+        // 4. GELİŞMİŞ FİZİK TABANLI KONFETİ (Kurdele + Yıldız + Daire)
+        // ============================================================
         const canvas = document.getElementById('confetti-canvas');
         const ctx = canvas.getContext('2d');
-        let confettiAnimation;
+        let confettiRaf = null;
         let particles = [];
 
         function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+            const dpr = Math.min(window.devicePixelRatio || 1, 2);
+            canvas.width = window.innerWidth * dpr;
+            canvas.height = window.innerHeight * dpr;
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
         }
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
 
-        function createParticle() {
-            const colors = ['#ec4899', '#f472b6', '#fbcfe8', '#fbbf24', '#60a5fa'];
+        const CONFETTI_COLORS = ['#f22e84', '#db176d', '#ff9bc8', '#f59e0b', '#fbbf24', '#a855f7', '#ffffff'];
+
+        function createParticle(burst = false) {
+            const w = window.innerWidth;
+            const h = window.innerHeight;
+            const angle = burst ? (Math.random() * Math.PI * 2) : 0;
+            const speed = burst ? (Math.random() * 8 + 4) : 0;
             return {
-                x: Math.random() * canvas.width,
-                y: Math.random() * canvas.height - canvas.height,
-                color: colors[Math.floor(Math.random() * colors.length)],
-                size: Math.random() * 8 + 4,
-                speedY: Math.random() * 3 + 2,
-                speedX: Math.random() * 2 - 1,
-                angle: Math.random() * 360
+                x: burst ? w / 2 : Math.random() * w,
+                y: burst ? h * 0.42 : -20 - Math.random() * h * 0.6,
+                vx: burst ? Math.cos(angle) * speed : (Math.random() - 0.5) * 2.2,
+                vy: burst ? Math.sin(angle) * speed - 4 : Math.random() * 2.8 + 1.8,
+                color: CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)],
+                size: Math.random() * 7 + 5,
+                shape: Math.random() < 0.55 ? 'ribbon' : (Math.random() < 0.5 ? 'circle' : 'diamond'),
+                rot: Math.random() * Math.PI * 2,
+                rotSpeed: (Math.random() - 0.5) * 0.16,
+                wobble: Math.random() * Math.PI * 2,
+                wobbleSpeed: Math.random() * 0.08 + 0.04
             };
         }
 
         function drawConfetti() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach((p, index) => {
-                p.y += p.speedY;
-                p.x += Math.sin(p.angle) * 2;
-                p.angle += 0.1;
-                
-                ctx.fillStyle = p.color;
-                ctx.beginPath();
-                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-                ctx.fill();
+            const w = window.innerWidth;
+            const h = window.innerHeight;
+            ctx.clearRect(0, 0, w, h);
 
-                if (p.y > canvas.height) {
-                    particles[index] = createParticle();
-                    particles[index].y = -10;
+            for (let i = 0; i < particles.length; i++) {
+                const p = particles[i];
+                p.wobble += p.wobbleSpeed;
+                p.vx *= 0.99;
+                p.vy = Math.min(p.vy + 0.08, 5.2);
+                p.x += p.vx + Math.sin(p.wobble) * 1.1;
+                p.y += p.vy;
+                p.rot += p.rotSpeed;
+
+                ctx.save();
+                ctx.translate(p.x, p.y);
+                ctx.rotate(p.rot);
+                ctx.fillStyle = p.color;
+
+                if (p.shape === 'ribbon') {
+                    ctx.scale(1, Math.cos(p.wobble));
+                    ctx.fillRect(-p.size * 0.6, -p.size * 0.3, p.size * 1.2, p.size * 0.6);
+                } else if (p.shape === 'diamond') {
+                    ctx.beginPath();
+                    ctx.moveTo(0, -p.size * 0.6);
+                    ctx.lineTo(p.size * 0.45, 0);
+                    ctx.lineTo(0, p.size * 0.6);
+                    ctx.lineTo(-p.size * 0.45, 0);
+                    ctx.closePath();
+                    ctx.fill();
+                } else {
+                    ctx.beginPath();
+                    ctx.arc(0, 0, p.size * 0.4, 0, Math.PI * 2);
+                    ctx.fill();
                 }
-            });
-            confettiAnimation = requestAnimationFrame(drawConfetti);
+                ctx.restore();
+
+                if (p.y > h + 30) {
+                    particles[i] = createParticle(false);
+                }
+            }
+            confettiRaf = requestAnimationFrame(drawConfetti);
         }
 
         function startConfetti() {
-            particles = Array(150).fill().map(createParticle);
+            stopConfetti();
+            particles = [
+                ...Array.from({ length: 75 }, () => createParticle(true)),
+                ...Array.from({ length: 75 }, () => createParticle(false))
+            ];
             drawConfetti();
         }
 
         function stopConfetti() {
-            cancelAnimationFrame(confettiAnimation);
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            if (confettiRaf) cancelAnimationFrame(confettiRaf);
+            confettiRaf = null;
+            ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
         }
 
+        // ============================================================
+        // 6. BAŞLANGIÇ: AMBIENT SPARKLES + SAYIMLAR + KLAVYE KISAYOLLARI
+        // ============================================================
+        (function init() {
+            // Generate subtle floating sparkles
+            const layer = document.getElementById('ambient-layer');
+            const count = window.innerWidth < 640 ? 10 : 18;
+            for (let i = 0; i < count; i++) {
+                const dot = document.createElement('div');
+                const size = Math.random() * 14 + 6;
+                dot.className = 'ambient-sparkle';
+                dot.style.width = `${size}px`;
+                dot.style.height = `${size}px`;
+                dot.style.left = `${Math.random() * 100}%`;
+                dot.style.top = `${Math.random() * 100}%`;
+                dot.style.setProperty('--dur', `${(Math.random() * 7 + 7).toFixed(1)}s`);
+                dot.style.setProperty('--delay', `${(Math.random() * 6).toFixed(1)}s`);
+                dot.style.setProperty('--dx', `${(Math.random() * 28 - 14).toFixed(0)}px`);
+                layer.appendChild(dot);
+            }
+
+            // Keyboard shortcuts (1/2/3 on game stage)
+            document.addEventListener('keydown', (e) => {
+                const gameVisible = !document.getElementById('game-container').classList.contains('hidden');
+                const modalOpen = !document.getElementById('result-modal').classList.contains('hidden');
+                if (gameVisible && !modalOpen && !isProcessing) {
+                    if (e.key === '1') chooseBox(1);
+                    if (e.key === '2') chooseBox(2);
+                    if (e.key === '3') chooseBox(3);
+                }
+            });
+        })();
     </script>
 </body>
 </html>
